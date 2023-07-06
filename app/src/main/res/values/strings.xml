@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Pelicula</string>
+    <string name="your_string_name">Your string value</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
