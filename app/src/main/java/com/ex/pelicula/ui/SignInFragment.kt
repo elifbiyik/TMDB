@@ -60,10 +60,15 @@ class SignInFragment : Fragment() {
 
             if (isValid) {
                 Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
-
+/*
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.constraint, HomePageFragment())
+                    .commit()*/
+
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.constraint, AccountFragment())
                     .commit()
+
 
 
             } else Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()

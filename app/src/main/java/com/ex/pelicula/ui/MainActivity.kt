@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        loadFragment(HomePageFragment())
+        loadFragment(SignInFragment())
 
 
     }

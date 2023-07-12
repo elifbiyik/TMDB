@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.ex.pelicula.models.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.tasks.await
@@ -46,6 +47,27 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
             false
         }
     }
+
+
+    fun getUser (): List<String> {
+
+        var user = auth.currentUser
+
+        var userEmail = user!!.email
+        var userName = user.displayName
+
+        var list = listOf(userEmail, userName)
+
+
+        Log.d("userId", user.toString())
+        Log.d("userIdEmail", userEmail.toString())
+        Log.d("userIdName", userName.toString())
+
+        return list as List<String>
+
+    }
+
+
 }
 
 
