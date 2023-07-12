@@ -60,21 +60,10 @@ class SignUpFragment : Fragment() {
             var lastName = binding.txtLastName.text.toString()
 
 
-            /*            viewModel.emailMLD.value = email
-                        viewModel.passwordMLD.value = password
-                        viewModel.nameMLD.value = name
-                        viewModel.lastNameMLD.value = lastName*/
-
-            // XML'den zaten view modele gidiyor ( @=user.email .... ) . Buna gerek var mı ?
-
-            //  viewModel.signUp()
-
             lifecycleScope.launch {
             viewModel.signUp(email, password, name, lastName)
 
         }}
-
-
 
 
 
@@ -87,28 +76,6 @@ class SignUpFragment : Fragment() {
             } else Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
 
         })
-        /*     viewModel.signUpRes.observe(this, Observer {
-                 binding.txtInPassword.text = it.toString()
-             })
-             viewModel.signUpRes.observe(this, Observer {
-                 binding.txtInEmail.text = it.toString()
-             })
-             viewModel.signUpRes.observe(this, Observer {
-                 binding.txtLastName.text = it.toString()
-             })
-             // Değer güncellendiğinde alır txtLastName'e atar
-     */
-
-
-
-
-
-
-
-
-
-
-
 
 
         return binding.root

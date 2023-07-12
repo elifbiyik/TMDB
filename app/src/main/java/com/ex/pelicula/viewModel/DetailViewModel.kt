@@ -3,31 +3,30 @@ package com.ex.pelicula.viewModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ex.pelicula.models.FavoriteMovies
+import com.ex.pelicula.models.Movie
 import com.ex.pelicula.repository.RepositoryFavorite
 
 
 class DetailViewModel() : ViewModel() {
 
-    private var repo: RepositoryFavorite = RepositoryFavorite()
- //   var favMutableLiveData = MutableLiveData<List<String>>()
+    private val repo: RepositoryFavorite = RepositoryFavorite.getInstance()
+    var favMutableLiveData = MutableLiveData<ArrayList<FavoriteMovies>>()
+    var isFav: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
-    var favMutableLiveData = MutableLiveData<List<String>>()
-
-    fun addFavorite(movieName: String) {
-
-        var list = repo.addFavorite(movieName)
-        favMutableLiveData.value = list
-
-        Log.d("xx", favMutableLiveData.value.toString())
-        Log.d("xx", list.toString())
-
+    fun addFavorite(movieList: FavoriteMovies) {
+        repo.addFavorite(movieList)
+        favMutableLiveData.value = repo.getFavorite()
+        isFav.value = true
+        Log.d("VM",favMutableLiveData.value.toString())
 
     }
 
-    fun removeFavorite(movieName: String) {
-
-        var list = repo.removeFavorite(movieName)
-        favMutableLiveData.value = list
+    fun removeFavorite(movieList: FavoriteMovies) {
+        repo.removeFavorite(movieList)
+        favMutableLiveData.value = repo.getFavorite()
+        isFav.value = false
+        Log.d("VM",favMutableLiveData.value.toString())
 
     }
 }

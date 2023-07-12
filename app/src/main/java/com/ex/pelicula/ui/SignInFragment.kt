@@ -65,7 +65,6 @@ class SignInFragment : Fragment() {
                     .replace(R.id.constraint, HomePageFragment())
                     .commit()
 
-                // Anasayfaya yönlendir.
 
             } else Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
 
@@ -82,6 +81,9 @@ class SignInFragment : Fragment() {
         return binding.root
     }
 }
+
+
+
 
 
 /*

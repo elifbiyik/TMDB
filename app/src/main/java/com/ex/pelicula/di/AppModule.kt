@@ -2,6 +2,7 @@ package com.ex.pelicula.di
 
 import com.ex.pelicula.api.MovieApiService
 import com.ex.pelicula.data.ApiConstant
+import com.ex.pelicula.models.FavoriteMovies
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
@@ -32,20 +33,6 @@ object AppModule {
         return FirebaseDatabase.getInstance()
     }
 
-
-    /*
-    @Provides
-    @Singleton
-    fun provideRetrofitInstance(): MovieApiService {
-        return (Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(MovieApiService::class.java)
-                )
-    }*/
-
-
     // OkHttp -> HTTP istekleri oluşturmak ve sunucudan gelen yanıtları işlemek için kullanılır
     // Retrofit için OkHttpClient kullan
     @Provides
@@ -57,20 +44,25 @@ object AppModule {
     @Provides
     @Singleton
     fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
-
         return Retrofit.Builder()
             .baseUrl(ApiConstant.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
     @Provides
     @Singleton
     fun provideApiService(retrofit: Retrofit): MovieApiService {
         return retrofit.create(MovieApiService::class.java)
-
     }
+
+
+
+
+
+
+
+
 }
 
 

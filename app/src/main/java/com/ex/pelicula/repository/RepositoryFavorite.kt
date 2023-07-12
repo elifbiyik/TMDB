@@ -1,34 +1,40 @@
 package com.ex.pelicula.repository
 
-import android.os.Bundle
-import com.ex.pelicula.ui.FavoriteFragment
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import com.ex.pelicula.models.FavoriteMovies
 
-class RepositoryFavorite {
-    //   kullanıcı değiştiğinde liste sıfırlanması için if kullanılıcak mı ? dB'ye kaydetmek gerekir.
-
-
-    //private var list: MutableList<String> = mutableListOf()
-    //ArrayListe göre daha çok özelliği var.
-
-    private var list: MutableList<String> = mutableListOf()
+class RepositoryFavorite private constructor() {
+    //   kullanıcı değiştiğinde liste sıfırlanması için if kullanılıcak mı ?
 
 
+    private var list: ArrayList<FavoriteMovies> = ArrayList<FavoriteMovies>()
 
-    fun addFavorite(name: String): MutableList<String> {
-        list.add(name)
+    fun addFavorite(movieList: FavoriteMovies) {
+        list.add(movieList)
+        Log.d("Repo", list.toString())
+    }
+
+    fun removeFavorite(movieList: FavoriteMovies) {
+        list.remove(movieList)
+        Log.d("Repo", list.toString())
+    }
+
+
+    fun getFavorite(): ArrayList<FavoriteMovies> {
         return list
     }
 
-    fun removeFavorite(name: String): MutableList<String> {
-        list.remove(name)
-        return list
-    }
+    // Liste her seferinde yeniden oluşuyordu ve 2. film eklenmiyordu.
+    // Bu kod ve VM'de getInstance ile liste bir kere oluşuyor ve diğer filmler o listeye ekleniyor.
 
-    fun getList() {
-        var fragment = FavoriteFragment()
-        var bundle = Bundle()
-        bundle.putStringArrayList("list", ArrayList(list))
-        fragment.arguments = bundle
-
+    companion object {
+        private var instance: RepositoryFavorite? = null
+        fun getInstance(): RepositoryFavorite {
+            if (instance == null) {
+                instance = RepositoryFavorite()
+            }
+            return instance as RepositoryFavorite
+        }
     }
 }

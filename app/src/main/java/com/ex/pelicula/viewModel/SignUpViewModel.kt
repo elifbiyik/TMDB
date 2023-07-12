@@ -18,15 +18,6 @@ class SignUpViewModel @Inject constructor(
     ) : ViewModel() {
 
 
-
-
-    /*
-        var emailMLD = MutableLiveData<String>()
-        var passwordMLD = MutableLiveData<String>()
-        var nameMLD = MutableLiveData<String>()
-        var lastNameMLD = MutableLiveData<String>()
-    */
-
     var signUpRes = MutableLiveData<Boolean>()
 
     suspend fun signUp(email: String, password: String, name: String, lastname: String) {

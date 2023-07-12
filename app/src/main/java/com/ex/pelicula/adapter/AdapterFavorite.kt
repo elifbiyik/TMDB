@@ -1,3 +1,4 @@
+
 package com.ex.pelicula.adapter
 
 import android.view.LayoutInflater
@@ -5,26 +6,30 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ex.pelicula.R
-import com.ex.pelicula.databinding.FragmentFavBinding
-import com.ex.pelicula.ui.FavoriteFragment
+import com.ex.pelicula.databinding.FragmentFavItemBinding
+import com.ex.pelicula.databinding.FragmentHomePageItemBinding
+import com.ex.pelicula.models.FavoriteMovies
+import com.ex.pelicula.models.Movie
 
 
-class AdapterFavorite(var list: ArrayList<String> = ArrayList()) :
+class AdapterFavorite(var list: List<FavoriteMovies>) :
     RecyclerView.Adapter<AdapterFavorite.ViewHolder>() {
 
   //  var list: ArrayList<String> = ArrayList()
 
-    class ViewHolder(var binding: FragmentFavBinding) : RecyclerView.ViewHolder(binding.root) {
-
+    class ViewHolder(var binding: FragmentFavItemBinding) : RecyclerView.ViewHolder(binding.root) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         val inflater = LayoutInflater.from(parent.context)
 
-        var binding = DataBindingUtil.inflate<FragmentFavBinding>(
+    //    val binding = FragmentFavItemBinding.inflate(inflater,parent,false)
+
+
+        var binding = DataBindingUtil.inflate<FragmentFavItemBinding>(
             inflater,
-            R.layout.fragment_fav,
+            R.layout.fragment_fav_item,
             parent,
             false
         )
@@ -41,7 +46,11 @@ class AdapterFavorite(var list: ArrayList<String> = ArrayList()) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         var favList =  list[position]
-        holder.binding.favMovie = favList
+  //      holder.binding.favMovie = favList
+
+        holder.binding.favName.text = favList.original_title
+
+
 
     }
 }
