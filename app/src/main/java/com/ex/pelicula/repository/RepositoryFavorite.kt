@@ -11,15 +11,21 @@ class RepositoryFavorite private constructor() {
     private var list: ArrayList<FavoriteMovies> = ArrayList<FavoriteMovies>()
 
     fun addFavorite(movieList: FavoriteMovies) {
-        list.add(movieList)
-        Log.d("Repo", list.toString())
+
+   //     if (!list.contains(movieList)) {
+            list.add(movieList)
+            Log.d("Repo", list.toString())
+   //     }
+
+
     }
 
     fun removeFavorite(movieList: FavoriteMovies) {
-        list.remove(movieList)
-        Log.d("Repo", list.toString())
+  //      if (list.contains(movieList)) {
+            list.remove(movieList)
+            Log.d("Repo", list.toString())
+   //     }
     }
-
 
     fun getFavorite(): ArrayList<FavoriteMovies> {
         return list

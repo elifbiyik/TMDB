@@ -66,7 +66,7 @@ class SignInFragment : Fragment() {
                     .commit()*/
 
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.constraint, AccountFragment())
+                    .replace(R.id.constraint, HomePageFragment())
                     .commit()
 
 

@@ -18,21 +18,26 @@
         app:cardCornerRadius="15dp">
 
 
+
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:padding="15dp">
+            <!--  android:onClick="@{()-> listener.click()}">-->
+
+            <!--   listener.click() yaparsan bunu çalıştırmış olursun ama
+               listener::click yaparsam referans vermiş olurum.-->
 
             <include
-                layout="@layout/fragment_fav"
+                layout="@layout/fragment_home_page"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-
-
             <TextView
-                android:id="@+id/favName"
-                android:layout_width="242dp"
-                android:layout_height="96dp"
+                android:id="@+id/tv_name"
+                android:layout_width="245dp"
+                android:layout_height="99dp"
                 android:layout_marginStart="20dp"
                 android:gravity="center"
                 android:padding="20dp"
@@ -40,32 +45,24 @@
                 android:textColor="@color/purple"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/favImage"
+                app:layout_constraintEnd_toStartOf="@+id/tv_vote_average"
+                app:layout_constraintHorizontal_bias="0.288"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.296"
                 tools:ignore="MissingConstraints" />
 
-
-
-<!--
-            android:text="@{movie.original_title}"
--->
-
-
             <ImageView
-                android:id="@+id/favImage"
-                android:layout_width="99dp"
-                android:layout_height="97dp"
-                app:imageUrl="@{favMovie.poster_path}"
+                android:id="@+id/imageView"
+                android:layout_width="119dp"
+                android:layout_height="177dp"
+                android:background="@drawable/background_poster"
                 android:src="@drawable/ic_launcher_background"
+                app:imageUrl="@{favMovie.poster_path}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
-<!--
-            android:imageUrl="@{movie}"
--->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

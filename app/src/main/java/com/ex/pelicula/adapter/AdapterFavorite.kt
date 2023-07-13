@@ -10,9 +10,10 @@ import com.ex.pelicula.databinding.FragmentFavItemBinding
 import com.ex.pelicula.databinding.FragmentHomePageItemBinding
 import com.ex.pelicula.models.FavoriteMovies
 import com.ex.pelicula.models.Movie
+import java.io.Serializable
 
 
-class AdapterFavorite(var list: List<FavoriteMovies>) :
+class AdapterFavorite(var list: ArrayList<FavoriteMovies>, private val onClick : (FavoriteMovies) -> Unit)  :
     RecyclerView.Adapter<AdapterFavorite.ViewHolder>() {
 
   //  var list: ArrayList<String> = ArrayList()
@@ -46,13 +47,13 @@ class AdapterFavorite(var list: List<FavoriteMovies>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         var favList =  list[position]
-  //      holder.binding.favMovie = favList
+        holder.binding.favMovie = favList
 
-        holder.binding.favName.text = favList.original_title
-
-
+        holder.binding.root.setOnClickListener { onClick(favList) }
 
     }
+
+
 }
 
 

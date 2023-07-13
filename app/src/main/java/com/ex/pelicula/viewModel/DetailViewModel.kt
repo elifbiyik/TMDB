@@ -14,19 +14,28 @@ class DetailViewModel() : ViewModel() {
     var favMutableLiveData = MutableLiveData<ArrayList<FavoriteMovies>>()
     var isFav: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
-    fun addFavorite(movieList: FavoriteMovies) {
-        repo.addFavorite(movieList)
-        favMutableLiveData.value = repo.getFavorite()
-        isFav.value = true
-        Log.d("VM",favMutableLiveData.value.toString())
 
+
+    fun addFavorite(movieList: FavoriteMovies) {
+
+            repo.addFavorite(movieList)
+            favMutableLiveData.value = repo.getFavorite()
+//            isFav.value = true
+            Log.d("VMaddFavorite", favMutableLiveData.value.toString())
     }
 
     fun removeFavorite(movieList: FavoriteMovies) {
         repo.removeFavorite(movieList)
         favMutableLiveData.value = repo.getFavorite()
-        isFav.value = false
-        Log.d("VM",favMutableLiveData.value.toString())
+  //      isFav.value = false
+        Log.d("VMremoveFavorite",favMutableLiveData.value.toString())
 
     }
+
+
+    fun getFavorite(): ArrayList<FavoriteMovies> {
+        return repo.getFavorite()
+    }
+
+
 }
