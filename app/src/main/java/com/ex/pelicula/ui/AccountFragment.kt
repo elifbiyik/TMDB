@@ -41,13 +41,15 @@ class AccountFragment : Fragment() {
 
         viewModel.getUser()
 
-        viewModel.userMutableLiveData.observe(viewLifecycleOwner, Observer { userId ->
-            if (userId !== null) {
+        viewModel.userMutableLiveData.observe(viewLifecycleOwner, Observer { user ->
+            if (user !== null) {
                 Toast.makeText(context, "Not null", Toast.LENGTH_SHORT).show()
 
-                Log.d("userId-userId[0]", userId[0])
-                Log.d("userId-userId[1]", userId[1])
+                Log.d("userId-user[0]", user[0])
+                Log.d("userId-user[1]", user[1])
 
+                binding.accEmail.text = user[0]
+                binding.accName.text = user[1]
 
             }
             else Toast.makeText(context, " Null", Toast.LENGTH_SHORT).show()
