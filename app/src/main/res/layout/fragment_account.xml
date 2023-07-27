@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="user"
+            type="com.ex.pelicula.viewModel.AccountViewModel" />
 
 
     </data>
@@ -15,51 +18,112 @@
 
         <!-- TODO: Update blank fragment layout -->
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@color/purpleee">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+                <TextView
+                    android:id="@+id/edit"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="340dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Edit"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints" />
+
+                <ImageView
+                    android:id="@+id/editImage"
+                    android:layout_width="32dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="350dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/edit"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit"
+                    app:layout_constraintVertical_bias="0.933" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+
+        <EditText
             android:id="@+id/acc_name"
             android:layout_width="220dp"
             android:layout_height="46dp"
-            android:layout_marginTop="72dp"
-            android:text="Account Frag"
+            android:layout_marginTop="132dp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/acc_im"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/acc_im"
             app:layout_constraintTop_toBottomOf="@+id/acc_im" />
 
         <ImageView
-            android:id="@+id/acc_im"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="148dp"
-            android:src="@drawable/account96"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            android:id="@+id/imageView3"
+            android:layout_width="39dp"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/acc_name"
+            app:layout_constraintEnd_toStartOf="@+id/acc_name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/acc_name"
+            app:srcCompat="@drawable/user" />
 
-        <TextView
+
+
+        <EditText
             android:id="@+id/acc_email"
             android:layout_width="220dp"
             android:layout_height="46dp"
-            android:layout_marginTop="60dp"
-            android:text="TextView"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/acc_name"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/acc_name"
             app:layout_constraintTop_toBottomOf="@+id/acc_name"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.168" />
 
         <ImageView
-            android:id="@+id/edit"
-            android:layout_width="52dp"
-            android:layout_height="49dp"
-            android:src="@drawable/edit"
-            app:layout_constraintBottom_toTopOf="@+id/acc_im"
+            android:id="@+id/imageView2"
+            android:layout_width="39dp"
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/acc_email"
+            app:layout_constraintEnd_toStartOf="@+id/acc_email"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/acc_email"
+            app:srcCompat="@drawable/mail" />
+
+        <ImageView
+            android:id="@+id/acc_im"
+            android:layout_width="183dp"
+            android:layout_height="176dp"
+            android:layout_marginTop="76dp"
+            android:src="@drawable/account96"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.955"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.161" />
+            />
+
+
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

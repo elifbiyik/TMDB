@@ -6,14 +6,12 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,37 +20,16 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.ex.pelicula.R
 import com.ex.pelicula.databinding.FragmentAccountBinding
-import com.ex.pelicula.viewModel.AccountViewModel
+import com.ex.pelicula.viewModel.AccountViewModel2
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-
-
-/*
-
-Bitmap: görüntü verilerini (resim) tutmak ve işlemek için kullanılan bir sınıftır.
-Uri: kaynaklara (dosyalara, veritabanlarına, web sitelerine vb.)
-benzersiz bir şekilde erişmek için kullanılan bir kimliklendiricidir.
-
-
-
-Android'de Bitmap, görüntüleri göstermek, işlemek ve manipüle etmek için yaygın olarak kullanılır.
-Android'de, Uri sınıfı, medya dosyalarına, içerik sağlayıcılara, web adreslerine ve diğer kaynaklara işaret etmek için kullanılır.
-
-Firebase Storage gibi hizmetlere görüntü yüklemek istediğinizde, genellikle Uri tipinde bir konum belirtmeniz gerekir.
-
- */
-
-
 
 
 @AndroidEntryPoint
-class AccountFragment : Fragment() {
+class AccountFragment2 : Fragment() {
 
 
-    private val viewModel: AccountViewModel by viewModels()
+    private val viewModel: AccountViewModel2 by viewModels()
     private lateinit var binding: FragmentAccountBinding
 
 
@@ -67,25 +44,23 @@ class AccountFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
 
-
-// İzin verilip verilmediğini kontrol ediyor.
-            /*
-            if (ContextCompat.checkSelfPermission(
-                     requireContext(),
-                     android.Manifest.permission.READ_EXTERNAL_STORAGE
-                 )
-                 != PackageManager.PERMISSION_GRANTED
-             ) {
-                 ActivityCompat.requestPermissions(
-                     requireActivity(),
-                     arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                     PERMISSION_REQUEST_CODE
-                 )
-
-             }
-             */
         }
     }
+
+
+
+// onPause -> Kullanıcı arayüzünden çıkıldığında yaypılan işlemler
+// Galeriden resim seçmek için arayüzden çıkılıyor. AMA SEÇTİĞİM RESMİN DEĞİL ÖNCEKİ RESMİN GELMESİ İLE İLGİSİ NE ?
+    override fun onPause() {
+        super.onPause()
+
+        lifecycleScope.launch {
+            Log.d("imageuri", imageUri.toString())
+            viewModel.updateUserProfilePhoto(imageUri)
+        }
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,7 +70,10 @@ class AccountFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_account, container, false)
         binding.lifecycleOwner = this
 
-        viewModel.getUser()
+
+        viewModel.getUser()   // Sayfa ilk açıldığında email ve name gelmesini sağladık.
+        viewModel.getProfil()
+
 
         binding.accEmail.isEnabled = false
         binding.accName.isEnabled = false
@@ -115,13 +93,9 @@ class AccountFragment : Fragment() {
                 binding.edit.text = "Edit"
                 binding.editImage.visibility = View.GONE
 
-
                 viewModel.updateUser(newEmail, newName) // Firebaseye kaydetme işlemi
 
-                lifecycleScope.launch {
-                    Log.d("imageuri", imageUri.toString())
-                    viewModel.updateUserProfilePhoto(imageUri?: Uri.EMPTY)
-                }
+
             } else {
                 binding.accEmail.isEnabled = true
                 binding.accName.isEnabled = true
@@ -142,31 +116,19 @@ class AccountFragment : Fragment() {
             builder.setPositiveButton("Gallery") { dialog, which ->
                 dialog.dismiss()
 
-                //        val intent  = Intent()
-                //        intent.type = "images/*"
-                //        intent.action = Intent.ACTION_GET_CONTENT
-// Yukardaki 3 kodu kullanıp aşağıdaki intent kodunu kullanmazsan ; Galeri değil Dosya açılıyor.
-//!!! ACTION_GET_CONTENT bütün dosyalara erişmeyi sağlıyor biz tipini (images/*) belirterek resim seçmesini sağlıyoruz.
-// Request codu kullanmak ; Birden fazla intent varsa o intentleri birbirinden ayırmak için sabit sayı kullanırız. (Sallayabilirsin sayıyı 3, 5 .. farketmez)
-
-
                 val intent =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 startActivityForResult(intent, REQUEST_IMAGE_GALLERY)
             } // Uri bilgisi saklanıyor. bunu çekmeye çalışıcaz. onActivityResult ile uri'yi alıyoruz. (Aşağıda)
 
-            /* builder.setNegativeButton("Camera") { dialog, which ->
-                 dialog.dismiss()
-                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                 startActivityForResult(intent, REQUEST_IMAGE_CAMERA)
-
-             }*/
+            // ACTION_PICK -> belirli bir içerik türünü ve belirli bir veri türünü seçmek için kullanıl
+            // MediaStore.Images.Media.EXTERNAL_CONTENT_URI -> Galeriden seçmek için
+            // startActivityForResult -> Galeri seçiminin sonucunu alırız. (Uri bilgsini)
 
             val dialog: AlertDialog = builder.create()
             dialog.show()
-
-
         }
+
 
 
 
@@ -175,75 +137,78 @@ class AccountFragment : Fragment() {
 
                 binding.accEmail.setText(user.email)
                 binding.accName.setText(user.displayName)
-                Glide.with(requireContext())
-                    .load(user.photoUrl)
-                    .into(binding.accIm)
+
 
             } else Toast.makeText(context, " Null", Toast.LENGTH_SHORT).show()
         })
-
-
         viewModel.profilMutableLiveData.observe(viewLifecycleOwner, Observer { uri ->
-
-            if (uri != null) {
-                Glide.with(requireContext())
-                    .load(uri)
-                    .into(binding.accIm)
-            } else Toast.makeText(context, "Uri boş", Toast.LENGTH_SHORT).show()
+            Glide.with(requireContext())
+                .load(uri)
+                .into(binding.accIm)
+            Toast.makeText(context, " Glide", Toast.LENGTH_SHORT).show()
         })
-
-
-
-
-
 
 
         return binding.root
 
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-//RESULT_OK = Yaptıımız iş başarılıysa. Kullanıcı gerçekten image seçtiyse
+
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_IMAGE_GALLERY -> {
                     val selectedImageUri: Uri? = data?.data  //Seçilen resmin urisi alınır
 
+                    /*            if (selectedImageUri != null) {
+                                    // Seçilen resmin urisini kullanarak bitmap nesnesi alır.
+                                    // Bitmap yaptık çünkü : Resimleri işlemek veya görüntülemek için Android'de Bitmap nesneleri yaygın olarak kullanılır.
+                                    val bitmap = MediaStore.Images.Media.getBitmap(
+                                        requireContext().contentResolver,
+                                        selectedImageUri
+                                    )        //Bitmap'e dönüştürdük !
+
+                                    val originHeight = bitmap.height
+                                    val originWidth = bitmap.width
+                                    val isPortrait = originHeight > originWidth
+                                    var newWidth = 0
+                                    var newHeight = 0
+                                    var scaleRate = 0f
+                                    if (isPortrait) {
+                                        scaleRate = 300f / originHeight
+                                    } else {
+                                        scaleRate = 300f / originWidth
+                                    }
+                                    newHeight = Math.round(originHeight * scaleRate)
+                                    newWidth = Math.round(originWidth * scaleRate)
+
+                                    val resizedBitmap = Bitmap.createScaledBitmap(
+                                        bitmap,
+                                        newWidth,
+                                        newHeight,
+                                        true
+                                    )
+
+
+                                    binding.accIm.setImageBitmap(resizedBitmap)*/
+
+
                     binding.accIm.setImageURI(selectedImageUri)
                     imageUri = selectedImageUri!!
                 }
-
-                /* REQUEST_IMAGE_CAMERA -> {
-                     val imageBitmap = data?.extras?.get("data") as Bitmap
-                     imageUri = saveImageToFile(imageBitmap)!!
-                     binding.accIm.setImageBitmap(imageBitmap)
-                 }*/
             }
         }
     }
-
-    private fun saveImageToFile(bitmap: Bitmap): Uri? {
-
-        val imagesDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imageFile = File(imagesDir, "profile_image.jpg")
-        try {
-            val stream = FileOutputStream(imageFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
-            stream.flush()
-            stream.close()
-            return FileProvider.getUriForFile(
-                requireContext(),
-                "com.ex.pelicula.fileprovider",
-                imageFile
-            )
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return null
-    }
 }
+
+
+
+
+
+
 
 
 //onActivityResult : eski ve geleneksel startActivityForResult ve onActivityResult yöntemleridir

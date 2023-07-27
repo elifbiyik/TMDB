@@ -21,6 +21,7 @@ class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) :
 
 
     var movieMutableList: MutableLiveData<List<Movie>> = MutableLiveData()
+    var filteredMutableLiveData : MutableLiveData<List<Movie>> = MutableLiveData()
 
 
     fun getMoviePopular(page: Int) {
@@ -31,24 +32,10 @@ class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) :
                 response: Response<GetMoviesResponse>
             ) {
                 if (response.isSuccessful) {
-                    val responseBody =
-                        response.body()                  //responseBody : GetMoviesResponse
+                    val responseBody = response.body()                  //responseBody : GetMoviesResponse
 
                     if (responseBody != null) {
-                        Log.d(
-                            "VM1",
-                            "${responseBody}"
-                        )             // GetMoviesResponse(page=1, results=[Movie(id=385687, original_language=en,
-                        Log.d(
-                            "VM2",
-                            "${responseBody.results}"
-                        )    //[Movie(id=385687, original_language=en...
-
-
-                        movieMutableList.value =
-                            responseBody.results.sortedByDescending { it.vote_average }
-                        Log.d("VM3", movieMutableList.value.toString())
-
+                        movieMutableList.value = responseBody.results.sortedByDescending { it.vote_average }
 
                     } else {
                         Log.d("HataVM4", "Null")
@@ -62,6 +49,23 @@ class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) :
 
         })
     }
+
+
+    fun getFilter(search : String) {
+        if (search.isBlank()) {
+            filteredMutableLiveData.value = movieMutableList.value
+        } else {
+            filteredMutableLiveData.value = movieMutableList.value?.filter { it.original_title.contains(search, ignoreCase = true) }
+        }
+    }
+
+    // movieMutableList'imdeki verileri alıyor.
+    // Verileri filtreliyor.
+    // movieMutableLiveData içindeki original_title'ları alır. Bu title'lar search değişkenini içerip içeriyorsa FilteredMLD'ye atar
+
+
+
+
 }
 
 
@@ -74,28 +78,18 @@ class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) :
 
 
 /*
-    fun getMovie(page: Int) {
-        repo.getData(page).enqueue(object : Callback<List<GetMoviesResponse>> {
-            override fun onResponse(
-                call: Call<List<GetMoviesResponse>>,
-                response: Response<List<GetMoviesResponse>>
-            ) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        movieMutableList.value = responseBody!!
-                        Log.d("Repository", responseBody.toString())
-                    } else {
-                        Log.d("Repository", "else")
-                    }
-                }
-            }
-            override fun onFailure(call: Call<List<GetMoviesResponse>>, t: Throwable) {
-                Log.d("Repository", "${t.message}")
-            }
-        })
-    }
-    // " Expected BEGIN_ARRAY but was BEGIN_OBJECT at line 1 column 2 path $ " hatası veriyor.
+  Log.d(
+                            "VM1",
+                            "${responseBody}"
+                        )             // GetMoviesResponse(page=1, results=[Movie(id=385687, original_language=en,
+                        Log.d(
+                            "VM2",
+                            "${responseBody.results}"
+                        )    //[Movie(id=385687, original_language=en...
+
+
+
+
 */
 
 

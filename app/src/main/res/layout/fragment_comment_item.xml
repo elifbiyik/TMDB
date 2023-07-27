@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="comment"
+            type="com.ex.pelicula.models.Comment" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.CommentFragment">
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="405dp"
+            android:layout_height="172dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameMovie">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+
+
+                <EditText
+                    android:id="@+id/editTextComment"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="44dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btn_send"
+                    android:layout_width="75dp"
+                    android:layout_height="43dp"
+                    android:text="Send"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editTextComment"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.425"
+                    app:layout_constraintStart_toEndOf="@+id/editTextComment"
+                    app:layout_constraintTop_toTopOf="@+id/editTextComment"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <RatingBar
+                    android:id="@+id/rating"
+                    android:progressTint="@color/yellow"
+                    android:stepSize="1.0"
+                    android:layout_width="240dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintEnd_toEndOf="@+id/editTextComment"
+                    app:layout_constraintStart_toStartOf="@+id/editTextComment"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextComment" />
+
+
+                <!-- android:progressTint="@color/yellow" -> Üzerine geldiğinde rengi sarı olucak-->
+                <!-- android:stepSize="1.0" -> Her bir yıldız 1 puan olucak deidk -->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="405dp"
+            android:layout_height="366dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintVertical_bias="0.991">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="45dp"
+                android:elevation="10dp"
+                android:orientation="vertical"
+                app:cardCornerRadius="15dp">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp">
+
+                    <!--   <include
+                        android:id="@+id/include"
+                        layout="@layout/fragment_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:layout_editor_absoluteX="15dp"
+                        tools:layout_editor_absoluteY="15dp" />
+
+             -->
+
+                    <TextView
+                        android:id="@+id/txt_comment"
+                        android:layout_width="349dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:padding="20dp"
+                        android:textColor="@color/purple"
+                        android:textSize="18sp"
+                        android:text="@{comment.comment}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/txt_point"
+                        app:layout_constraintStart_toStartOf="@+id/txt_name"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_name"
+                        tools:ignore="MissingConstraints" />
+                    <!--                        android:text="@{comment.comment}"-->
+
+
+                    <TextView
+                        android:id="@+id/txt_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="21dp"
+                        android:textColor="@color/purple"
+                        app:layout_constraintEnd_toStartOf="@+id/txt_point"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!--                        android:text="@{comment.userId}"-->
+
+
+                    <TextView
+                        android:id="@+id/txt_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="22dp"
+                        android:layout_marginEnd="8dp"
+                        android:textColor="@color/purple"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+<!--                    android:text="@{comment.point}"-->
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/nameMovie"
+            android:layout_width="393dp"
+            android:layout_height="79dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:padding="20dp"
+            android:textColor="@color/purple"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

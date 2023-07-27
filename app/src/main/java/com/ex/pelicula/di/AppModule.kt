@@ -17,7 +17,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object AppModuleAppModule {
+
+// Provides -> Bağımlılıkları oluşturmak için
 
 
     @Provides

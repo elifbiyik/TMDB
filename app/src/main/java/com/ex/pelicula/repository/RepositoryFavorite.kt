@@ -1,46 +1,60 @@
 package com.ex.pelicula.repository
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.ex.pelicula.models.FavoriteMovies
+import com.ex.pelicula.db.FavoriteDao
+import com.ex.pelicula.models.Movie
+import com.google.firebase.auth.FirebaseUser
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RepositoryFavorite private constructor() {
-    //   kullanıcı değiştiğinde liste sıfırlanması için if kullanılıcak mı ?
-
-
-    private var list: ArrayList<FavoriteMovies> = ArrayList<FavoriteMovies>()
-
-    fun addFavorite(movieList: FavoriteMovies) {
-
-   //     if (!list.contains(movieList)) {
-            list.add(movieList)
-            Log.d("Repo", list.toString())
-   //     }
+@Singleton
+class RepositoryFavorite @Inject constructor(private val favoriteDao: FavoriteDao , private val repoUser: RepositoryUser
+) {
 
 
+
+
+    //  private var list: ArrayList<Movie> = ArrayList()
+
+   suspend fun addFavorite(movie: Movie) {
+            favoriteDao.insert(movie)
     }
 
-    fun removeFavorite(movieList: FavoriteMovies) {
-  //      if (list.contains(movieList)) {
-            list.remove(movieList)
-            Log.d("Repo", list.toString())
-   //     }
+    suspend fun removeFavorite(movie: Movie) {
+            favoriteDao.delete(movie)
     }
 
-    fun getFavorite(): ArrayList<FavoriteMovies> {
-        return list
+    suspend fun getFavorite(userId : String): List<Movie> {
+        Log.d("ROOMRepositoryFav", repoUser.getUser().toString())
+            return favoriteDao.getAll(userId)
+
+   //    return favoriteDao.getAll()
     }
 
-    // Liste her seferinde yeniden oluşuyordu ve 2. film eklenmiyordu.
-    // Bu kod ve VM'de getInstance ile liste bir kere oluşuyor ve diğer filmler o listeye ekleniyor.
-
-    companion object {
-        private var instance: RepositoryFavorite? = null
-        fun getInstance(): RepositoryFavorite {
-            if (instance == null) {
-                instance = RepositoryFavorite()
-            }
-            return instance as RepositoryFavorite
-        }
+    fun getUser(): String {
+        return repoUser.currentUser()
     }
+
+
+
+
+/*    suspend fun insertFav (movie : Movie) {
+        favoriteDao.insert(movie)
+    }
+
+    fun getAllFavMovie() {
+        favoriteDao.getAll()
+    }*/
 }
+
+
+/*    companion object { ......
+
+     - sınıfın bir singleton nesnesini oluşturur.
+     - Bu sayede aynı liste ile işlem yapılır. ( Diğer türlü sürekli yeni liste oluşturup ekleme yapıyordu ( yani listeye 1'den fazla eklenmiyordu 2. film için yeni liste yapıyordu. ))
+
+
+
+
+
+ */

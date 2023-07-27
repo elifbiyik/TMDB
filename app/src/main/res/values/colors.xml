@@ -6,9 +6,16 @@
 
     <color name="purple">#B292EC</color>
     <color name="purplee">#C6ADF3</color>
+    <color name="purpleee">#E6E0F1</color>
 
     <color name="Red">#B80303</color>
 
     <color name="Green">#00FF0A</color>
+
+
+    <color name="yellow">#F6DD02</color>
+
+
+
 
 </resources>

@@ -28,6 +28,7 @@ class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
     private val viewModel: SignUpViewModel by viewModels()
 
+    lateinit var bottomNav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +43,8 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.visibility = View.GONE
-
-
+        bottomNav = requireActivity().findViewById(R.id.bottomNavigationView)
+        bottomNav.visibility = View.GONE
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up, container, false)
 

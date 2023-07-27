@@ -27,7 +27,7 @@ class SignInViewModel @Inject constructor(
 
         val isValid = repo.signIn(email, password)
 
-        if (email.toString().isNullOrBlank() || password.toString().isNullOrBlank()) {
+        if (email.isNullOrBlank() || password.isNullOrBlank()) {
             Toast.makeText(
                 context,
                 "Please enter your email and password",

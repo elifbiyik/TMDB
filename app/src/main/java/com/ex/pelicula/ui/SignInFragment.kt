@@ -27,6 +27,8 @@ class SignInFragment : Fragment() {
     private lateinit var binding: FragmentSignInBinding
     private val viewModel: SignInViewModel by viewModels()
 
+    lateinit var bottomNav : BottomNavigationView
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,14 +36,12 @@ class SignInFragment : Fragment() {
     ): View? {
 
 
-        val view = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        view.visibility = View.GONE
-
+        bottomNav = requireActivity().findViewById(R.id.bottomNavigationView)
+        bottomNav.visibility = View.GONE
 
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_in, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-
 
 
         binding.button4.setOnClickListener {
@@ -51,7 +51,7 @@ class SignInFragment : Fragment() {
 
             // GlobalScope
             lifecycleScope.launch {
-                viewModel.signIn(email.toString(), password.toString())
+                viewModel.signIn(email, password)
             }
         }
 
@@ -60,15 +60,10 @@ class SignInFragment : Fragment() {
 
             if (isValid) {
                 Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
-/*
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.constraint, HomePageFragment())
-                    .commit()*/
 
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.constraint, HomePageFragment())
                     .commit()
-
 
 
             } else Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
@@ -86,9 +81,6 @@ class SignInFragment : Fragment() {
         return binding.root
     }
 }
-
-
-
 
 
 /*

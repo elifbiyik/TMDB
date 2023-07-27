@@ -5,7 +5,7 @@
     <data>
         <variable
             name="favMovie"
-            type="com.ex.pelicula.models.FavoriteMovies" />
+            type="com.ex.pelicula.models.Movie" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -18,9 +18,6 @@
         app:cardCornerRadius="15dp">
 
 
-
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -31,25 +28,28 @@
                listener::click yaparsam referans vermiş olurum.-->
 
             <include
-                layout="@layout/fragment_home_page"
+                android:id="@+id/include"
+                layout="@layout/fragment_fav"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                tools:layout_editor_absoluteX="15dp"
+                tools:layout_editor_absoluteY="15dp" />
+
             <TextView
                 android:id="@+id/tv_name"
-                android:layout_width="245dp"
-                android:layout_height="99dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="238dp"
+                android:layout_height="98dp"
+                android:layout_marginStart="12dp"
                 android:gravity="center"
                 android:padding="20dp"
                 android:text="@{favMovie.original_title}"
                 android:textColor="@color/purple"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tv_vote_average"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.288"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.296"
                 tools:ignore="MissingConstraints" />
 
             <ImageView
@@ -62,6 +62,19 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/favorite"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/favoritered"
+                tools:ignore="ExtraText,MissingConstraints" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

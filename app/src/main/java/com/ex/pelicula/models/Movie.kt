@@ -1,20 +1,49 @@
 package com.ex.pelicula.models
 
-import com.google.gson.annotations.SerializedName
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "Favorite", primaryKeys = ["id","userId"])
 data class Movie(
+
+    @ColumnInfo(name = "id")
     var id: Long,
-    var original_language: String,
-    var backdrop_path : String,
+    var original_language: String?,
+
+    @ColumnInfo(name = "backdrop_path")
+    var backdrop_path: String?,
+
+    @ColumnInfo(name = "original_title")
     var original_title: String,
-    var overview: String,
-    var popularity: Float,
+
+    @ColumnInfo(name = "overview")
+    var overview: String?,
+    var popularity: Float?,
+
+    @ColumnInfo(name = "poster_path")
     var poster_path: String,
-    var release_date: String,
-    var title: String,
-    var video: Boolean,
-    var vote_average: String,
-    var vote_count: Int
+
+    var release_date: String?,
+    var title: String?,
+    var video: Boolean?,
+
+    @ColumnInfo(name = "vote_average")
+    var vote_average: String?,
+    var vote_count: Int?,
+
+    @ColumnInfo(name = "userId")
+    var userId: String
+
+    /*
+        // Apide bu özellik yok. Room için bu ekle ??
+        @ColumnInfo(name = "userId")
+        var userId: String?
+        */
+
+
+
+
 )
 
 

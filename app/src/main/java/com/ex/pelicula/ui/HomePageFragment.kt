@@ -1,29 +1,21 @@
 package com.ex.pelicula.ui
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.ex.pelicula.R
 import com.ex.pelicula.adapter.AdapterHomePage
-import com.ex.pelicula.databinding.ActivityMainBinding
 import com.ex.pelicula.databinding.FragmentHomePageBinding
 import com.ex.pelicula.viewModel.HomePageViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -34,18 +26,40 @@ class HomePageFragment : Fragment() {
     private lateinit var viewModel: HomePageViewModel
     private lateinit var movieAdapter: AdapterHomePage
 
+    lateinit var bottomNav : BottomNavigationView
+
+
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomePageBinding.inflate(inflater,container,false)
+
+        bottomNav = requireActivity().findViewById(R.id.bottomNavigationView)
+        bottomNav.visibility = View.VISIBLE
+
+
+        binding = FragmentHomePageBinding.inflate(inflater, container, false)
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                p0?.let { viewModel.getFilter(it) }
+                return true
+            }
+        })
+
 
 //Last Parameter Call -> lambdayı parantez içine koymadan fonksiyon parametresi olarak iletme.
 // AdapterHomePage(emptyList(), { ... }) ile aynı anlama geliyor.
@@ -54,10 +68,12 @@ class HomePageFragment : Fragment() {
 
             var fragment = DetailFragment()
             var bundle = Bundle()
+            bundle.putString("id", it.id.toString())
             bundle.putString("name", it.original_title)
             bundle.putString("vote_average", it.vote_average)
             bundle.putString("overview", it.overview)
-            bundle.putString("imageURL", it.backdrop_path) // Poster'i değil backdrop gönderdik.
+            bundle.putString("imageURL", it.backdrop_path) // Detail için Poster'i değil backdrop gönderdik.
+            bundle.putString("imagePoster", it.poster_path)  // Favori için poster gönderdik.
             fragment.arguments = bundle
 
 
@@ -72,99 +88,44 @@ class HomePageFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(HomePageViewModel::class.java)
 
+
+        viewModel.getMoviePopular(1)
+
+
         viewModel.movieMutableList.observe(viewLifecycleOwner, Observer { movies ->
             movieAdapter.movieList = movies
             movieAdapter.notifyDataSetChanged()
-            if (movies.isEmpty()) Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT)
+            if (movies.isEmpty()) Toast.makeText(
+                requireContext(),
+                "Unsuccessful",
+                Toast.LENGTH_SHORT
+            )
                 .show()
             else Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
         })
-        viewModel.getMoviePopular(1)
-
-    }
-}
-
-        /*    binding = DataBindingUtil.inflate(inflater, R.layout.activity_main, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
-     */
-        /*  val recyclerView = binding.recyclerview
-        recyclerView.layoutManager = LinearLayoutManager(context)
-
-       */
-        /*
-        movieAdapter = AdapterHomePage(emptyList())
-            { movie ->
-            var fragment = DetailFragment()
-            var bundle = Bundle()
-            bundle.putString("name", movie.original_title)
-            bundle.putString("vote_average", movie.vote_average)
-            bundle.putString("overview", movie.overview)
-            fragment.arguments = bundle
-
-            Log.d("hata1", movie.original_title)
-
-            try {
 
 
-                val transaction = (context as FragmentActivity)
-                    .supportFragmentManager.beginTransaction()
-
-                transaction.replace(R.id.constraint, DetailFragment())
-                    .addToBackStack(null)
-                    .commit()
-
-
-            } catch (e: Exception) {
-                Log.d("hata", e.message.toString())
-            }
-        }
-
-*/
-
-        /*    movieAdapter = AdapterHomePage(requireContext(),
-            emptyList())
-
-
-        binding.recyclerview.adapter = movieAdapter
-
-        viewModel.getMoviePopular(1)
-
-
-        viewModel.movieMutableList.observe(viewLifecycleOwner, Observer { list ->
-
-           movieAdapter.movieList = list
-
+        // Adapterıma yeni liste oluşturmak yerine olan listeye filtrelenmiş haliyle adaptera gönderdik.
+        // ViewModelde Filtrelendi ve MLD'ye atandı
+        viewModel.filteredMutableLiveData.observe(viewLifecycleOwner, Observer {
+            movieAdapter.movieList = it
             movieAdapter.notifyDataSetChanged()
-
-            if (list.isEmpty()) Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT)
+            if (it.isEmpty()) Toast.makeText(
+                requireContext(),
+                "filteredMutableLiveData Unsuccessful",
+                Toast.LENGTH_SHORT
+            )
                 .show()
-            else Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
+            else Toast.makeText(requireContext(), "filteredMutableLiveData Successful", Toast.LENGTH_SHORT).show()
         })
 
-        return binding.root
+
+
+
 
     }
 
-
-
-    private fun onClick() {
-
-        val transaction = (context as AppCompatActivity).
-           supportFragmentManager.beginTransaction()
-
-        transaction.replace(R.id.constraint, DetailFragment())
-            .addToBackStack(null)
-            .commit()
-
-    }
-
-     */
-
-
-
-
-
-
+}
 
 /*
 // MutableLiveDatadaki filmleri adapter'a gönderdik.

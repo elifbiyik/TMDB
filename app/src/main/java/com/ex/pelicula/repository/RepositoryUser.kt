@@ -1,12 +1,16 @@
 package com.ex.pelicula.repository
 
-import android.content.ContentValues.TAG
+import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
 import com.ex.pelicula.models.User
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -17,7 +21,8 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
     private val databaseReference: DatabaseReference =
         FirebaseDatabase.getInstance().getReference("User")
 
-  //  var userId: String? = null
+
+    //  var userId: String? = null
 
     init {
         auth = FirebaseAuth.getInstance()
@@ -26,7 +31,7 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
 
     suspend fun signIn(email: String, password: String): Boolean {
         return try {
-            auth.signInWithEmailAndPassword(email.toString(), password.toString()).await()
+            auth.signInWithEmailAndPassword(email, password).await()
             true
         } catch (e: Exception) {
             false
@@ -38,10 +43,19 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
     suspend fun signUp(email: String, password: String, name: String, lastname: String): Boolean {
         return try {
             val x = auth.createUserWithEmailAndPassword(email, password).await()
-            val userId = databaseReference.push().getKey()
+
+            var userName = UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build()
+
+            auth.currentUser!!.updateProfile(userName)
+            // Name bilgisini displayName'e atadık çünkü name çağıramıyoruz. displayName çağrılması gerekiyor.
+
+            val userId = auth.currentUser!!.uid
+            //   val userId = databaseReference.push().getKey()
             val user = User(email, password, name, lastname)
             databaseReference.child(userId!!).setValue(user)
-            Log.d(TAG, "userId = $userId")
+
             true
         } catch (e: Exception) {
             false
@@ -49,89 +63,133 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
     }
 
 
-    fun getUser (): List<String> {
+    fun getUser(): FirebaseUser? {
 
-        var user = auth.currentUser
+        return auth.currentUser
 
-        var userEmail = user!!.email
-        var userName = user.displayName
+        Log.d("ROOM", auth.currentUser.toString())
 
-        var list = listOf(userEmail, userName)
-
-
-        Log.d("userId", user.toString())
-        Log.d("userIdEmail", userEmail.toString())
-        Log.d("userIdName", userName.toString())
-
-        return list as List<String>
+//        var userEmail = user!!.email
+//        var userName = user.displayName
+//
+//
+//        var list = listOf(userEmail, userName)
+//
+//        Log.d("displayName", userName.toString())
+//
+//        return list as List<String>
 
     }
+
+     fun currentUser(): String {
+       return auth.currentUser!!.uid
+        Log.d("auth.currentUser", auth.currentUser!!.uid)
+    }
+
+
+
+    @SuppressLint("SuspiciousIndentation")
+    fun updateUserEmailAndName(newEmail: String, newName: String) {
+
+        var user = auth.currentUser!!
+        var email = user.updateEmail(newEmail)
+
+        var name = UserProfileChangeRequest.Builder()
+            .setDisplayName(newName)
+            .build()
+
+        user.updateProfile(name)
+    }
+
+
+    fun getPhotoFor2(imageUri: Uri?): Task<Uri> {
+
+        var uid = auth.currentUser!!.uid
+
+        val storageReference = FirebaseStorage.getInstance()
+        var imageReference = storageReference.reference.child("images/$uid.jpg")
+
+        imageUri?.let { imageReference.putFile(it) }
+
+
+        var profile = UserProfileChangeRequest.Builder()
+            .setPhotoUri(imageUri)
+            .build()
+        auth.currentUser!!.updateProfile(profile)
+
+        return imageReference.downloadUrl
+
+    }
+
+
+    fun getProfile(): Task<Uri> {
+        var uid = auth.currentUser!!.uid
+        val imageReference = FirebaseStorage.getInstance().reference.child("images/$uid.jpg")
+        return imageReference.downloadUrl
+    }
+
+
+
 
 
 }
 
 
 
+    /*  fun setProfilePhoto(
+          bitmap: Bitmap//, imageView: ImageView, @ApplicationContext context: Context
+      )  : Task<Uri>
+      {
+
+          val user = auth.currentUser!!       //com.google.firebase.auth.internal.zzx@cb747da
+          val uid = user.uid                      // 3yJOVMFqyjd2CEWTSaIMq6OV9EE2
+
+          val storageReference = FirebaseStorage.getInstance()
+          var imageReference = storageReference.reference.child("images/$uid.jpg")
+
+          val baos = ByteArrayOutputStream()
+          bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+          val data = baos.toByteArray()
+
+          imageReference.putBytes(data).addOnSuccessListener { upTask ->
+              Log.d("TAG", "setProfilePhoto: ${upTask.task.result}")
+          }.addOnFailureListener {
+              Log.d("TAG", "setProfilePhoto: Error")
+          }.addOnCompleteListener { upTask ->
+              Log.d("TAG", "setProfilePhoto: ${upTask.result}")
+          }
+
+      //    imageReference.downloadUrl  // Resmi stroge'dan çekiyor.
+
+          return imageReference.downloadUrl
+      }
+  */
+
+    // Firebaseye ekliyor.
 
 
-/*
-
-    fun signInWithEmailAndPassword(
-        email: String,
-        password: String,
-        callback: (Boolean, String?) -> Unit
-    ) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    callback(true, null)
-                } else {
-                    callback(false, task.exception?.message)
-                }
-            }
-    }
+//// resmi değiştirmek için istek !
+//        var profile = UserProfileChangeRequest.Builder()
+//            .setPhotoUri(imageUri)
+//            .build()
+//
+//        user.updateProfile(profile)
+//
+////        return
+//  //     imageReference.downloadUrl
+//         /*   .addOnSuccessListener {
+//            Glide.with(context)
+//               .load(imageReference)
+//                .into(imageView)*/
+    //     }
 
 
-    suspend fun signUp1(email: String, password: String, name: String, lastname: String): Boolean {
-
-        // launch kullanırsam; result false olarak başlar -> auth.create .. ile başlayan kısım 3 saniye bekler ama bu bekleme süresibitene kadar false dönmüş olur.
-        // Çünkü launch dediğimizde o kısım bekliyor ama ondan sonraki kısımlar devam ediyor. ( Yani result = true olana kadar retunr false olmuş olucak )
-
-        //runBlocking yapıp delay(1000) veremyiz.( Defterdeki örnek gibi).
-        // Çünkü firebase işlemleri asenkton yapıda işlemler.
-        // runBlocking'i SENKRON İŞLEMLERDE KULLANABİLİRİM
-        // Senkron işlem veya asenkron işlem olduğunu nasıl anlarım? ->
-
-        var result = false
 
 
-        val x = auth.createUserWithEmailAndPassword(email, password)
-        x.await()
-        //          .addOnCompleteListener { task ->
-        if (x.isSuccessful) {
-            userId = databaseReference.push().getKey()
-            val user = User(email, password, name, lastname)
-            databaseReference.child(userId!!).setValue(user)
-            Log.d(TAG, "userId = $userId")
-            result = true
 
 
-        }
-
-        return result
-
-*/
-
-/*
-
-//      var databaseReference = FirebaseDatabase.getInstance().getReference("User")
-var user = User(email, password, name, lastname)
-
-userId = databaseReference.push().getKey()
-databaseReference.child(userId.toString()).setValue(user)
-*/
-
-// eğer kaydedilmezse false döndür.
+//     UserProfileChangeRequest.Builder()
+//  return UserProfileChangeRequest.Builder().photoUri
 
 
 //auth.createUserWithEmailAndPassword(email, password).await().user?.uid

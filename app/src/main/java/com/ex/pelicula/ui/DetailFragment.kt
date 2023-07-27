@@ -2,7 +2,6 @@ package com.ex.pelicula.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,23 +12,22 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.lifecycleScope
 import com.ex.pelicula.R
-import com.ex.pelicula.adapter.AdapterFavorite
 import com.ex.pelicula.databinding.FragmentDetailBinding
-import com.ex.pelicula.models.FavoriteMovies
-import com.ex.pelicula.models.GetMoviesResponse
 import com.ex.pelicula.models.Movie
-import com.ex.pelicula.util.ImageLoadBackground
+import com.ex.pelicula.util.ImageLoad
+
 import com.ex.pelicula.viewModel.DetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: DetailViewModel by viewModels()
-    private lateinit var adapter: AdapterFavorite
-    private lateinit var favMovies: FavoriteMovies
+    private lateinit var favMovies: Movie
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,126 +49,151 @@ class DetailFragment : Fragment() {
 
 
         var movieName = arguments?.getString("name")!!
-        var movieAverage = arguments?.getSerializable("vote_average").toString()
-        var movieOverview = arguments?.getSerializable("overview").toString()
-        var movieImage = arguments?.getSerializable("imageURL").toString()
+        var movieAverage = arguments?.getString("vote_average").toString()
+        var id = arguments?.getString("id")!!.toLong()
+        var movieOverview = arguments?.getString("overview").toString()
+        var movieImage = arguments?.getString("imageURL").toString()  // Backdrop
+        var movieImagePoster = arguments?.getString("imagePoster").toString()
+
+        var isFavorite = arguments?.getBoolean("isFavorite")
+        // Favori snınıfından detail syfası açıldıpında açılıyro. Fav olup olmadığını görmek için.
+
 
         binding.movieName.text = movieName
         binding.movieAverage.text = movieAverage
         binding.movieOverview.text = movieOverview
-        binding.movieImage.ImageLoadBackground(movieImage)
-        // binding.movieImage.ImageLoad(movieImage)
-        // NORMALDE BUNU KULLANICAKSIN AMA URL ÇALIŞMAIDIĞI İÇİN ÜSTTEKİNİ KULLAN !!!!!
+        binding.movieImage.ImageLoad(movieImage)
 
 
+        var userId = viewModel.getUser()
 
-        var list = viewModel.getFavorite()
-        favMovies = FavoriteMovies(movieName, movieImage)
-        Log.d("viewModel.getFavorite()", viewModel.getFavorite().toString())
-// Listeye ulaştık.
+        lifecycleScope.launch {
 
-        binding.detailfavorite.setOnClickListener {
+            var list = viewModel.getFavorite(userId)
 
-        if (list.contains(favMovies)){
-            binding.detailfavorite.setColorFilter(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.black
-                )
+            favMovies = Movie(
+                id,
+                null,
+                movieImage,
+                movieName,
+                movieOverview,
+                null,
+                movieImagePoster,
+                null,
+                null,
+                null,
+                movieAverage,
+                null,
+                userId
             )
 
-            viewModel.removeFavorite(favMovies)
-            Log.d(" if (list.contains(favMovies)){", list.toString())
 
-        }
-            else {
-            binding.detailfavorite.setColorFilter(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.Red
-                )
-            )
-           viewModel.addFavorite(favMovies)
-            Log.d(" if (list.contains(favMovies))else {{", list.toString())
-        }
- }
+            Log.d("favMovie", favMovies.toString())
+
+            //   var list = viewModel.isMovieInFavorites(favMovies) // Listin boş olup olmadığına bakmak için yazmıştım ama vm'de bakıyor zaten.
 
 
-
-
-/*
-
-        viewModel.isFav.observe(viewLifecycleOwner, Observer { value ->
-            if (!value) {
-                binding.detailfavorite.setColorFilter(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
-                )
-                Log.d("isFav", value.toString())
-            } else {
+            if (isFavorite == true) {
                 binding.detailfavorite.setColorFilter(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.Red
                     )
                 )
-                Log.d("isFav", value.toString())
             }
-        })
-*/
+
+
+            if (list.contains(favMovies)) {
+                binding.detailfavorite.setColorFilter(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.Red
+                    )
+                )
+            }
+
+            binding.detailfavorite.setOnClickListener {
+
+                if (list.contains(favMovies)) {
+                    binding.detailfavorite.setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.black
+                        )
+                    )
+                    viewModel.removeFavorite(favMovies, userId)
+                } else if (isFavorite == true) {
+                    binding.detailfavorite.setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.black
+                        )
+                    )
+                    viewModel.removeFavorite(favMovies, userId)
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.constraint, FavoriteFragment()).commit()
+
+                } else {
+                    binding.detailfavorite.setColorFilter(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.Red
+                        )
+                    )
+
+                    viewModel.addFavorite(favMovies, userId)
+                }
+
+            }
+        }
+
+
+        binding.comment.setOnClickListener {
+
+
+            // Comment sayfasına at -> detayına girdiğin bilgiler
+
+
+            var fragment = CommentFragment()
+            var bundle = Bundle()
+            bundle.putString("id", id.toString())
+            bundle.putString("name", movieName)
+            bundle.putString("userId", userId)
+
+            fragment.arguments = bundle
+
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.constraint, fragment)
+                .commit()
+
+
+        }
+
+
 
 
 
         viewModel.favMutableLiveData.observe(viewLifecycleOwner, Observer { list ->
 
+            Log.d("viewModel.favMutableLiveData.observe", list.toString())
 
-                Log.d("viewModel.favMutableLiveData.observe", list.toString())
+            if (!list.contains(favMovies)) {
 
-            if (!list.isEmpty()) {
-                Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), " Silindi  ", Toast.LENGTH_SHORT).show()
 
-                // bundle ile buradan göndersem ?? Direkt mutableLivedaatya ulaş FavFragten
 // bundle ile göndermeye gerek var mı direkt VM'den listeyi Favori fragmentına çekebiliriz ??
 
-
-              /*  var fragment = FavoriteFragment()
-                var bundle = Bundle()
-                bundle.putParcelableArrayList("list", list as ArrayList<out Parcelable?>?)
-                fragment.arguments = bundle*/
-
-
-
-                /*
-                                                // Diğer sayfayı açtırmya gerek var mı ?
-                                                             requireActivity().supportFragmentManager.beginTransaction()
-                                                                 .replace(R.id.constraint, FavoriteFragment()).commit()
-                */
-
-
-            } else Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
+            } else Toast.makeText(requireContext(), "Eklendi ", Toast.LENGTH_SHORT).show()
 
         })
-
-
 
 
         return binding.root
     }
 
-
-
-
 }
-
-
-
-
-
-
-
-
 
 
 /*
@@ -179,9 +202,6 @@ class DetailFragment : Fragment() {
         favMovie = Movie(original_title = movieName, poster_path = movieImage)
 
  */
-
-
-
 
 
 /*

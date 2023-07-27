@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.account -> {
-                    loadFragment(AccountFragment())
+                    loadFragment(AccountFragment2())
                     true
                 }
 
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        loadFragment(HomePageFragment())
+        loadFragment(SignInFragment())
 
 
     }

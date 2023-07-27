@@ -7,11 +7,10 @@
         <variable
             name="movie"
             type="com.ex.pelicula.models.Movie" />
-
-        <!-- <variable
-             name="listener"
-             type="com.ex.pelicula.adapter.setOnClickListener" />-->
     </data>
+
+
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -22,10 +21,6 @@
         android:orientation="vertical"
         app:cardCornerRadius="15dp">
 
-
-
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -35,10 +30,11 @@
             <!--   listener.click() yaparsan bunu çalıştırmış olursun ama
                listener::click yaparsam referans vermiş olurum.-->
 
-            <include
-                layout="@layout/fragment_home_page"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            <!-- <include
+                 layout="@layout/fragment_home_page"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent" /> -->
+
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="245dp"
