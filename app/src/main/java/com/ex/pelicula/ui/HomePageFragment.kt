@@ -10,6 +10,7 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ex.pelicula.R
 import com.ex.pelicula.adapter.AdapterHomePage
@@ -17,6 +18,7 @@ import com.ex.pelicula.databinding.FragmentHomePageBinding
 import com.ex.pelicula.viewModel.HomePageViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -26,7 +28,7 @@ class HomePageFragment : Fragment() {
     private lateinit var viewModel: HomePageViewModel
     private lateinit var movieAdapter: AdapterHomePage
 
-    lateinit var bottomNav : BottomNavigationView
+    lateinit var bottomNav: BottomNavigationView
 
 
     @SuppressLint("SuspiciousIndentation")
@@ -72,7 +74,10 @@ class HomePageFragment : Fragment() {
             bundle.putString("name", it.original_title)
             bundle.putString("vote_average", it.vote_average)
             bundle.putString("overview", it.overview)
-            bundle.putString("imageURL", it.backdrop_path) // Detail için Poster'i değil backdrop gönderdik.
+            bundle.putString(
+                "imageURL",
+                it.backdrop_path
+            ) // Detail için Poster'i değil backdrop gönderdik.
             bundle.putString("imagePoster", it.poster_path)  // Favori için poster gönderdik.
             fragment.arguments = bundle
 
@@ -90,42 +95,48 @@ class HomePageFragment : Fragment() {
 
 
         viewModel.getMoviePopular(1)
+/*
+        lifecycleScope.launch {
+            viewModel.getMoviePopular().observe(viewLifecycleOwner, Observer {
+                movieAdapter.submitData(lifecycle, it)
+            })}
+*/
+
+            viewModel.movieMutableList.observe(viewLifecycleOwner, Observer { movies ->
+             movieAdapter.movieList = movies
+             movieAdapter.notifyDataSetChanged()
+             if (movies.isEmpty()) Toast.makeText(
+                 requireContext(),
+                 "Unsuccessful",
+                 Toast.LENGTH_SHORT
+             )
+                 .show()
+             else Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
+         })
 
 
-        viewModel.movieMutableList.observe(viewLifecycleOwner, Observer { movies ->
-            movieAdapter.movieList = movies
-            movieAdapter.notifyDataSetChanged()
-            if (movies.isEmpty()) Toast.makeText(
-                requireContext(),
-                "Unsuccessful",
-                Toast.LENGTH_SHORT
-            )
-                .show()
-            else Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
-        })
+            // Adapterıma yeni liste oluşturmak yerine olan listeye filtrelenmiş haliyle adaptera gönderdik.
+            // ViewModelde Filtrelendi ve MLD'ye atandı
+            viewModel.filteredMutableLiveData.observe(viewLifecycleOwner, Observer {
+                movieAdapter.movieList = it
+                movieAdapter.notifyDataSetChanged()
+                if (it.isEmpty()) Toast.makeText(
+                    requireContext(),
+                    "filteredMutableLiveData Unsuccessful",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                else Toast.makeText(
+                    requireContext(),
+                    "filteredMutableLiveData Successful",
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
 
 
-        // Adapterıma yeni liste oluşturmak yerine olan listeye filtrelenmiş haliyle adaptera gönderdik.
-        // ViewModelde Filtrelendi ve MLD'ye atandı
-        viewModel.filteredMutableLiveData.observe(viewLifecycleOwner, Observer {
-            movieAdapter.movieList = it
-            movieAdapter.notifyDataSetChanged()
-            if (it.isEmpty()) Toast.makeText(
-                requireContext(),
-                "filteredMutableLiveData Unsuccessful",
-                Toast.LENGTH_SHORT
-            )
-                .show()
-            else Toast.makeText(requireContext(), "filteredMutableLiveData Successful", Toast.LENGTH_SHORT).show()
-        })
-
-
-
-
+        }
 
     }
-
-}
 
 /*
 // MutableLiveDatadaki filmleri adapter'a gönderdik.

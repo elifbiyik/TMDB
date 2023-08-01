@@ -36,8 +36,8 @@ class SignInFragment : Fragment() {
     ): View? {
 
 
-        bottomNav = requireActivity().findViewById(R.id.bottomNavigationView)
-        bottomNav.visibility = View.GONE
+/*        bottomNav = requireActivity().findViewById(R.id.bottomNavigationView)
+        bottomNav.visibility = View.GONE*/
 
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_in, container, false)

@@ -159,7 +159,7 @@ class DetailFragment : Fragment() {
             var bundle = Bundle()
             bundle.putString("id", id.toString())
             bundle.putString("name", movieName)
-            bundle.putString("userId", userId)
+            bundle.putString("userId", userId)      // Email ile değiştirildi.
 
             fragment.arguments = bundle
 

@@ -22,6 +22,10 @@ interface FavoriteDao {
 
 
 
+
+
+
+
  //   @Query ("SELECT *FROM Favorite")
  //   suspend fun getAll () : List<Movie>
 

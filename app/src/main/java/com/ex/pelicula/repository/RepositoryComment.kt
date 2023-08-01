@@ -14,8 +14,8 @@ class RepositoryComment @Inject constructor(var commentDao: CommentDao){
     }
 
 
-    suspend fun delete (comment : Comment){
-        commentDao.delete(comment)
+    suspend fun delete (list : List<Comment>){
+        commentDao.delete(list)
     }
 
 
@@ -23,6 +23,18 @@ class RepositoryComment @Inject constructor(var commentDao: CommentDao){
     suspend fun getAll(movieId : Long): List<Comment> {
          return commentDao.getAll(movieId)
     }
+
+    suspend fun getCommentAndRating(movieId: Long, userId : String) : List<Comment> {
+        return commentDao.getCommentAndRating(movieId, userId)
+    }
+
+    fun updateComment(userId: String, movieId: Long, comment: String, point : Float){
+        return commentDao.updateComment(userId, movieId, comment, point)
+    }
+
+ //   suspend fun update(newComment : Comment){
+   //     return commentDao.update(newComment)
+ //   }
 
 
 }

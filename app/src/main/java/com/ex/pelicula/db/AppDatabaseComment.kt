@@ -7,7 +7,7 @@ import com.ex.pelicula.models.Comment
 
 
 
-@Database(entities = [Comment::class], version = 3)
+@Database(entities = [Comment::class], version = 4)
 abstract class AppDatabaseComment : RoomDatabase() {
     abstract fun commentDao() : CommentDao
 }

@@ -4,6 +4,7 @@ import com.ex.pelicula.data.ApiConstant
 import com.ex.pelicula.models.GetMoviesResponse
 import com.ex.pelicula.models.Movie
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -14,11 +15,22 @@ interface MovieApiService {
 
 
 
+/*
     @GET(ApiConstant.GET_POPULAR)
     fun getPopular(
         @Query("api_key") apiKey: String = ApiConstant.API_KEY,
         @Query("page") page: Int
     ): Call<GetMoviesResponse>
+*/
+
+
+    @GET(ApiConstant.GET_POPULAR)
+    fun getPopular(
+        @Query("api_key") apiKey: String = ApiConstant.API_KEY,
+        @Query("page") page: Int
+    ): Call<GetMoviesResponse>// Response<GetMoviesResponse>
+
+
 
 
 

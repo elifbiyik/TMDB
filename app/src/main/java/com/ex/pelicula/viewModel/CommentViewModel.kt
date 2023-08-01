@@ -3,6 +3,8 @@ package com.ex.pelicula.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
 import com.ex.pelicula.models.Comment
 import com.ex.pelicula.repository.RepositoryComment
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,29 +16,28 @@ import javax.inject.Inject
 
 @HiltViewModel()
 class CommentViewModel @Inject constructor(
-    var repo: RepositoryComment //, var repoUser : RepositoryUser
+    var repo: RepositoryComment
 ) : ViewModel() {
 
 
     var commentMutableLiveData = MutableLiveData<List<Comment>>()
 
 
-    /*  fun getUser(){
-
-          repoUser.getUser()
-      }*/
-
-
     fun insert(comment: Comment, movieId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.insert(comment)
-            commentMutableLiveData.value = repo.getAll(movieId)
+            viewModelScope.launch(Dispatchers.Main) {
+                commentMutableLiveData.value = repo.getAll(movieId)
+            }
         }
     }
 
-    fun delete(comment: Comment) {
-        viewModelScope.launch {
-            //       commentMutableLiveData.value = repo.delete(comment)
+    fun delete(list: List<Comment>, movieId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.delete(list)
+            viewModelScope.launch(Dispatchers.Main) {
+                commentMutableLiveData.value = repo.getAll(movieId)
+            }
         }
     }
 
@@ -48,4 +49,23 @@ class CommentViewModel @Inject constructor(
     }
 
 
+    suspend fun getCommentAndRating(movieId: Long, userId: String): List<Comment> {
+
+        return withContext(Dispatchers.IO) {
+            repo.getCommentAndRating(movieId, userId)
+        }
+
+    }
+
+
+    fun updateComment(userId: String, movieId: Long, comment: String, point: Float) {
+        repo.updateComment(userId, movieId, comment, point)
+
+        // GetAll çağırmazsam textviewde comment'i güncellediğimde recyclerView'de güncellenmiyor. Ekrandan çıkıp girmek gerekiyor.
+        // viewModelScope.launch -> GetAll suspen olduğu için kullanıyoruz.
+           viewModelScope.launch {
+               commentMutableLiveData.value = repo.getAll(movieId)
+
+           }
+    }
 }

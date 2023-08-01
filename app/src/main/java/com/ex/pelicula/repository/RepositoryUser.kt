@@ -82,7 +82,7 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
     }
 
      fun currentUser(): String {
-       return auth.currentUser!!.uid
+       return auth.currentUser!!.email!! //auth.currentUser!!.uid
         Log.d("auth.currentUser", auth.currentUser!!.uid)
     }
 
@@ -92,13 +92,13 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
     fun updateUserEmailAndName(newEmail: String, newName: String) {
 
         var user = auth.currentUser!!
-        var email = user.updateEmail(newEmail)
 
         var name = UserProfileChangeRequest.Builder()
             .setDisplayName(newName)
             .build()
 
         user.updateProfile(name)
+        user.updateEmail(newEmail)
     }
 
 
