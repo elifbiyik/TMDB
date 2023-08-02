@@ -58,8 +58,8 @@ class CommentViewModel @Inject constructor(
     }
 
 
-    fun updateComment(userId: String, movieId: Long, comment: String, point: Float) {
-        repo.updateComment(userId, movieId, comment, point)
+    fun updateComment(userId: String, movieId: Long, comment: String, point: Float, userEmail : String) {
+        repo.updateComment(userId, movieId, comment, point, userEmail)
 
         // GetAll çağırmazsam textviewde comment'i güncellediğimde recyclerView'de güncellenmiyor. Ekrandan çıkıp girmek gerekiyor.
         // viewModelScope.launch -> GetAll suspen olduğu için kullanıyoruz.

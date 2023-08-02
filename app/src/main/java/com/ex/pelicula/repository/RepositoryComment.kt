@@ -28,8 +28,8 @@ class RepositoryComment @Inject constructor(var commentDao: CommentDao){
         return commentDao.getCommentAndRating(movieId, userId)
     }
 
-    fun updateComment(userId: String, movieId: Long, comment: String, point : Float){
-        return commentDao.updateComment(userId, movieId, comment, point)
+    fun updateComment(userId: String, movieId: Long, comment: String, point : Float, userEmail : String){
+        return commentDao.updateComment(userId, movieId, comment, point, userEmail)
     }
 
  //   suspend fun update(newComment : Comment){

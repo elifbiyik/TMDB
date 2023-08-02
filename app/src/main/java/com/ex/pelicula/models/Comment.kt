@@ -15,6 +15,10 @@ data class Comment(
     @ColumnInfo(name = "userId")
     var userId: String,
 
+    @ColumnInfo(name = "userEmail")
+    var userEmail: String,
+
+
     @ColumnInfo(name = "movieId")
     var movieId: Long,
 

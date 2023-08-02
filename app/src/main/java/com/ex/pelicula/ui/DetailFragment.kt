@@ -67,6 +67,7 @@ class DetailFragment : Fragment() {
 
 
         var userId = viewModel.getUser()
+        var userEmail = viewModel.getUserEmail()
 
         lifecycleScope.launch {
 
@@ -96,13 +97,6 @@ class DetailFragment : Fragment() {
 
             if (isFavorite == true) {
                 binding.detailfavorite.Color(R.color.Red)
-
-            /*setColorFilter(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.Red
-                    )
-                )*/
             }
 
 
@@ -143,7 +137,9 @@ class DetailFragment : Fragment() {
             var bundle = Bundle()
             bundle.putString("id", id.toString())
             bundle.putString("name", movieName)
-            bundle.putString("userId", userId)      // Email ile değiştirildi.
+            bundle.putString("userId", userId)
+
+            bundle.putString("userEmail", userEmail )
 
             fragment.arguments = bundle
 

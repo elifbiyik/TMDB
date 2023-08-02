@@ -33,7 +33,7 @@ class AdapterComment(var commentList: List<Comment>) :
                 comment = comments
                 executePendingBindings()
 
-                txtName.text = comments.userId
+                txtName.text = comments.userEmail
                 txtPoint.text = comments.point.toString()
                 //           txtComment.text = comments.comment
 

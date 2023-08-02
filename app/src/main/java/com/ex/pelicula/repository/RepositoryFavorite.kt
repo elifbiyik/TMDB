@@ -35,6 +35,10 @@ class RepositoryFavorite @Inject constructor(private val favoriteDao: FavoriteDa
         return repoUser.currentUser()
     }
 
+    fun getUserEmail(): String {
+        return repoUser.currentUserEmail()
+    }
+
 
 
 

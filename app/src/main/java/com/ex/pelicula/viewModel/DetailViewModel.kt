@@ -52,5 +52,9 @@ class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) 
         return repo.getUser()
     }
 
+    fun getUserEmail ():String {
+        return repo.getUserEmail()
+    }
+
 
 }

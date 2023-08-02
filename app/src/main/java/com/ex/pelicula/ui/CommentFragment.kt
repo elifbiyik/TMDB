@@ -64,6 +64,9 @@ class CommentFragment : Fragment() {
         var userId = arguments?.getString("userId").toString()
         var movieName = arguments?.getString("name").toString()
 
+        var userEmail = arguments?.getString("userEmail").toString()
+
+
         bindingItem.nameMovie.text = movieName
 
 
@@ -84,7 +87,7 @@ class CommentFragment : Fragment() {
                     var newComment = bindingItem.editTextComment.text.toString()
                     var newPoint = bindingItem.rating.rating.toInt()
 
-                    insertOrUpdate(newComment, newPoint.toFloat(), userId, movieId)
+                    insertOrUpdate(newComment, newPoint.toFloat(), userId, movieId, userEmail)
                 }
 
                 bindingItem.btnDelete.setOnClickListener {
@@ -101,7 +104,7 @@ class CommentFragment : Fragment() {
                     lifecycleScope.launch {
                         var newComment = bindingItem.editTextComment.text.toString()
                         var newPoint = bindingItem.rating.rating.toFloat()
-                        insertOrUpdate(newComment, newPoint, userId, movieId)
+                        insertOrUpdate(newComment, newPoint, userId, movieId, userEmail)
                     }
                 }
 
@@ -147,19 +150,17 @@ class CommentFragment : Fragment() {
         }
     }
 
-    fun insertOrUpdate(newComment: String, newPoint: Float, userId: String, movieId: Long) {
+    fun insertOrUpdate(newComment: String, newPoint: Float, userId: String, movieId: Long, userEmail : String) {
         if (newComment.isNotEmpty() && newPoint != 0.0.toFloat()) {
             lifecycleScope.launch(Dispatchers.IO) {
                 val getCommentAndRating =
                     viewModel.getCommentAndRating(movieId, userId)    // Kullanıcının yorum ve puanı
                 if (getCommentAndRating.isNotEmpty()) {
 
-                    viewModel.updateComment(userId, movieId, newComment, newPoint)
+                    viewModel.updateComment(userId, movieId, newComment, newPoint, userEmail)
                 } else {
 
-                    viewModel.insert(
-                        Comment(null, userId, movieId, newComment, newPoint.toInt()), movieId
-                    )
+                    viewModel.insert(Comment(null, userId,userEmail, movieId, newComment, newPoint.toInt()), movieId)
                 }
             }
         }

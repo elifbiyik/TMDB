@@ -26,8 +26,8 @@ interface CommentDao {
 
 
 
-    @Query("UPDATE Comment SET comment = :comment, point = :point Where movieId = :movieId AND userId = :userId")
-    fun updateComment(userId: String, movieId: Long, comment: String, point : Float)
+    @Query("UPDATE Comment SET comment = :comment, point = :point, userEmail = :userEmail  Where movieId = :movieId AND userId = :userId")
+    fun updateComment(userId: String, movieId: Long, comment: String, point : Float, userEmail: String)
 
 
 

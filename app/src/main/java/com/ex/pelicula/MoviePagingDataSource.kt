@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 /*
 
-Veri KAynağını yönetir.
+Veri Kaynağını yönetir.
 
 PagingSource classından türetilicek.
 PagingSource -> Sayfalara ayrılmış verilerin yüklenmesi için gerekli verileri sağlar

@@ -82,8 +82,10 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
     }
 
     fun currentUser(): String {
-        return auth.currentUser!!.email!! //auth.currentUser!!.uid
-        Log.d("auth.currentUser", auth.currentUser!!.uid)
+        return auth.currentUser!!.uid
+    }
+    fun currentUserEmail(): String {
+        return auth.currentUser!!.email!!
     }
 
 

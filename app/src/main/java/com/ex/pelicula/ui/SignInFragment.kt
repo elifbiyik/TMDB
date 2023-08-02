@@ -16,7 +16,6 @@ import com.ex.pelicula.databinding.FragmentSignInBinding
 import com.ex.pelicula.viewModel.SignInViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 

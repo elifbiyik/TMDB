@@ -2,7 +2,6 @@ package com.ex.pelicula.di
 
 import com.ex.pelicula.api.MovieApiService
 import com.ex.pelicula.data.ApiConstant
-import com.ex.pelicula.models.FavoriteMovies
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
