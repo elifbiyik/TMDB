@@ -11,6 +11,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
+import com.ex.pelicula.MoviePagingDataSource
 import com.ex.pelicula.models.GetMoviesResponse
 import com.ex.pelicula.models.Movie
 import com.ex.pelicula.repository.RepositoryMovie
@@ -23,16 +24,6 @@ import retrofit2.await
 import javax.inject.Inject
 
 
-/*
-
-Pager -> MoviePagingDataSource içindeki load fonk. çağırır.
-Flow -> asenkron veri akışını temsil eder.
-        verilerin akış halinde olduğunda bile akoştaki herbir veri parçaını ayrı ayrı ele alınabileceği ve işlenebileceği yapı sağlr.
-
-Flow yerine LiveData'da kullanılır. ViewModel ve View arasındaki iletişim için genelde LiveData kullanılır.
-
-
- */
 
 @HiltViewModel
 class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) : ViewModel() {
@@ -45,67 +36,97 @@ class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) :
     // ?? Boş liste ile adapterı başlatıp mld'yi observe ederek doldurmak gibi mi ???
 
 
+    /*
+    Pager -> MoviePagingDataSource içindeki load fonk. çağırır.
+    Flow -> asenkron veri akışını temsil eder.
+            verilerin akış halinde olduğunda bile akıştaki herbir veri parçaını ayrı ayrı ele alınabileceği ve işlenebileceği yapı sağlr.
+
+    Flow yerine LiveData'da kullanılır.
+    - ViewModel ve View arasındaki iletişim için genelde LiveData kullanılır.
+    - Son güncel değeri almak ve Otomatik UI güncellemeleri için LiveData
+    - Veri akışını yönetmek Flow
+    *** Flow'da işlenen verileri, UI'da göstermek için LiveData kullanılır ***
+     */
+
+
 // Paging'te mutableLiveData yerine LiveData kullanılıyor ???
-
-    var movieMutableList1: MutableLiveData<PagingData<Movie>> = MutableLiveData()
-    var movieMutableList: MutableLiveData<List<Movie>> = MutableLiveData()
-    var filteredMutableLiveData : MutableLiveData<List<Movie>> = MutableLiveData()
-
 // PagingConfig sınıfından nesne
-/*
-
-    fun getMoviePopular() : LiveData<PagingData<Movie>> {
-       return( Pager(PagingConfig(1)) {
-            MoviePagingDataSource(repo)     //Veri kaynağı yönetilit. Veri kaynağı = repo
-        }.liveData
-
-        )    }
-*/
 
 
 
-  // Paging kullandığımız için api dönüşü call olmamalı (Response yaptık). Call olmadığı için callback işlemi yapamadık.
+    // Pager sınıfı kullanılarak sayfa yapılandırılır.
+    // PagingConfig yüklemek için kullanılacak sayfa boyutu. Her sayfada yalnızca 1 öğe yüklenir.
+    // Eğer sayfa boyutu düşükse, sayfalamada daha az öğe yüklenir ve kullanıcı daha sık sayfa değiştirmek zorunda kalabilir.
+    // Eğer sayfa boyutu yüksekse, sayfalamada daha fazla öğe yüklenir ve kullanıcı daha az sayfa değiştirmek zorunda kalır.
 
-   fun getMoviePopular(page: Int) {
+    // .liveData -> LiveDataya dönüştürülür. ( Artık UI katmanını daha kolay yönetrebilirz.)
+    // .cachedIn(viewModelScope) -> datayı önbellekte saklar.
+    //                              Tekrar dönmek istediğimizde daha hızlı yükler çünkü önbellekte
+    //                              Fragment yaşam döngüsü yok olduğunda otomatik yok olur
 
-        repo.getDataPopular(page).enqueue(object : Callback<GetMoviesResponse> {
-            override fun onResponse(
-                call: Call<GetMoviesResponse>,
-                response: Response<GetMoviesResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()                  //responseBody : GetMoviesResponse
 
-                    if (responseBody != null) {
-                        movieMutableList.value = responseBody.results.sortedByDescending { it.vote_average }
 
-                    } else {
-                        Log.d("HataVM4", "Null")
+
+    fun getMoviePopular(): LiveData<PagingData<Movie>> {
+        return (Pager(PagingConfig(1)) {
+            MoviePagingDataSource(repo,"" )     //Veri kaynağı yönetilir. Veri kaynağı = repo
+        }.liveData.cachedIn(viewModelScope))
+    }
+
+
+
+    fun filterData(search : String) : LiveData<PagingData<Movie>> {
+
+        return (Pager(PagingConfig(1)){
+            MoviePagingDataSource(repo, search)
+        }.liveData)
+
+    }
+
+
+    // Paging kullandığımız için api dönüşü call olmamalı (Response yaptık). Call olmadığı için callback işlemi yapamadık.
+    /*
+
+       fun getMoviePopular(page: Int) {
+
+            repo.getDataPopular(page).enqueue(object : Callback<GetMoviesResponse> {
+                override fun onResponse(
+                    call: Call<GetMoviesResponse>,
+                    response: Response<GetMoviesResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()                  //responseBody : GetMoviesResponse
+
+                        if (responseBody != null) {
+                            movieMutableList.value = responseBody.results.sortedByDescending { it.vote_average }
+
+                        } else {
+                            Log.d("HataVM4", "Null")
+                        }
                     }
                 }
-            }
 
-            override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
-                Log.d("HataVM5onFailure", "${t.message}")
-            }
+                override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
+                    Log.d("HataVM5onFailure", "${t.message}")
+                }
 
-        })
-    }
+            })
+        }
+    */
+/*
 
 
-    fun getFilter(search : String) {
-      /*  if (search.isBlank()) {
-            filteredMutableLiveData.value = movieMutableList.value
-        } else {
-            filteredMutableLiveData.value = movieMutableList.value?.filter { it.original_title.contains(search, ignoreCase = true) }
-        }*/
-    }
+    fun getFilter(search: String) {
+          if (search.isBlank()) {
+              filteredMutableLiveData.value = movieMutableList.value
+          } else {
+              filteredMutableLiveData.value = movieMutableList.value?.filter { it.original_title.contains(search, ignoreCase = true) }
+          }}
+*/
 
     // movieMutableList'imdeki verileri alıyor.
     // Verileri filtreliyor.
     // movieMutableLiveData içindeki original_title'ları alır. Bu title'lar search değişkenini içerip içeriyorsa FilteredMLD'ye atar
-
-
 
 
 }

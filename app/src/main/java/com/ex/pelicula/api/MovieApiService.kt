@@ -25,17 +25,25 @@ interface MovieApiService {
 
 
     @GET(ApiConstant.GET_POPULAR)
-    fun getPopular(
+    suspend fun getPopular(
         @Query("api_key") apiKey: String = ApiConstant.API_KEY,
         @Query("page") page: Int
-    ): Call<GetMoviesResponse>// Response<GetMoviesResponse>
-
-
-
-
+    ): Response<GetMoviesResponse>
 
 }
 
+/*
+
+Call  -------> Direkt yanıtı döndürür.
+Response ----> HTTP durumunu da döndürür. ( İçerisinde yanıt, HTTP kodu (200, 500..) bilgileri vardır. )
+
+Response kullanma sebebi :
+Hata olup olmamasına göre bir sonraki sayfanın gelmesi için.
+Mesela 404 döndüğünde sayfalama yapılmaz.
+
+
+
+ */
 
 
 // ......com/movie/popular?api_key=657575&page=1

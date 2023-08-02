@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.ex.pelicula.R
 import com.ex.pelicula.databinding.FragmentDetailBinding
 import com.ex.pelicula.models.Movie
+import com.ex.pelicula.util.Color
 import com.ex.pelicula.util.ImageLoad
 
 import com.ex.pelicula.viewModel.DetailViewModel
@@ -94,53 +95,36 @@ class DetailFragment : Fragment() {
 
 
             if (isFavorite == true) {
-                binding.detailfavorite.setColorFilter(
+                binding.detailfavorite.Color(R.color.Red)
+
+            /*setColorFilter(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.Red
                     )
-                )
+                )*/
             }
 
 
             if (list.contains(favMovies)) {
-                binding.detailfavorite.setColorFilter(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.Red
-                    )
-                )
+                binding.detailfavorite.Color(R.color.Red)
             }
 
             binding.detailfavorite.setOnClickListener {
 
                 if (list.contains(favMovies)) {
-                    binding.detailfavorite.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.black
-                        )
-                    )
+                    binding.detailfavorite.Color(R.color.black)
                     viewModel.removeFavorite(favMovies, userId)
-                } else if (isFavorite == true) {
-                    binding.detailfavorite.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.black
-                        )
-                    )
+                }
+                else if (isFavorite == true) {
+                    binding.detailfavorite.Color(R.color.black)
                     viewModel.removeFavorite(favMovies, userId)
 
                     requireActivity().supportFragmentManager.beginTransaction()
                         .replace(R.id.constraint, FavoriteFragment()).commit()
 
                 } else {
-                    binding.detailfavorite.setColorFilter(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.Red
-                        )
-                    )
+                    binding.detailfavorite.Color(R.color.Red)
 
                     viewModel.addFavorite(favMovies, userId)
                 }

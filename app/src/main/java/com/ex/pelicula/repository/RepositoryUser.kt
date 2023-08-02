@@ -81,24 +81,23 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
 
     }
 
-     fun currentUser(): String {
-       return auth.currentUser!!.email!! //auth.currentUser!!.uid
+    fun currentUser(): String {
+        return auth.currentUser!!.email!! //auth.currentUser!!.uid
         Log.d("auth.currentUser", auth.currentUser!!.uid)
     }
-
 
 
     @SuppressLint("SuspiciousIndentation")
     fun updateUserEmailAndName(newEmail: String, newName: String) {
 
         var user = auth.currentUser!!
-
+        var email = user.updateEmail(newEmail)
         var name = UserProfileChangeRequest.Builder()
             .setDisplayName(newName)
             .build()
 
         user.updateProfile(name)
-        user.updateEmail(newEmail)
+
     }
 
 
@@ -129,43 +128,39 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
     }
 
 
-
-
-
 }
 
 
+/*  fun setProfilePhoto(
+      bitmap: Bitmap//, imageView: ImageView, @ApplicationContext context: Context
+  )  : Task<Uri>
+  {
 
-    /*  fun setProfilePhoto(
-          bitmap: Bitmap//, imageView: ImageView, @ApplicationContext context: Context
-      )  : Task<Uri>
-      {
+      val user = auth.currentUser!!       //com.google.firebase.auth.internal.zzx@cb747da
+      val uid = user.uid                      // 3yJOVMFqyjd2CEWTSaIMq6OV9EE2
 
-          val user = auth.currentUser!!       //com.google.firebase.auth.internal.zzx@cb747da
-          val uid = user.uid                      // 3yJOVMFqyjd2CEWTSaIMq6OV9EE2
+      val storageReference = FirebaseStorage.getInstance()
+      var imageReference = storageReference.reference.child("images/$uid.jpg")
 
-          val storageReference = FirebaseStorage.getInstance()
-          var imageReference = storageReference.reference.child("images/$uid.jpg")
+      val baos = ByteArrayOutputStream()
+      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+      val data = baos.toByteArray()
 
-          val baos = ByteArrayOutputStream()
-          bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-          val data = baos.toByteArray()
-
-          imageReference.putBytes(data).addOnSuccessListener { upTask ->
-              Log.d("TAG", "setProfilePhoto: ${upTask.task.result}")
-          }.addOnFailureListener {
-              Log.d("TAG", "setProfilePhoto: Error")
-          }.addOnCompleteListener { upTask ->
-              Log.d("TAG", "setProfilePhoto: ${upTask.result}")
-          }
-
-      //    imageReference.downloadUrl  // Resmi stroge'dan çekiyor.
-
-          return imageReference.downloadUrl
+      imageReference.putBytes(data).addOnSuccessListener { upTask ->
+          Log.d("TAG", "setProfilePhoto: ${upTask.task.result}")
+      }.addOnFailureListener {
+          Log.d("TAG", "setProfilePhoto: Error")
+      }.addOnCompleteListener { upTask ->
+          Log.d("TAG", "setProfilePhoto: ${upTask.result}")
       }
-  */
 
-    // Firebaseye ekliyor.
+  //    imageReference.downloadUrl  // Resmi stroge'dan çekiyor.
+
+      return imageReference.downloadUrl
+  }
+*/
+
+// Firebaseye ekliyor.
 
 
 //// resmi değiştirmek için istek !
@@ -181,11 +176,7 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
 //            Glide.with(context)
 //               .load(imageReference)
 //                .into(imageView)*/
-    //     }
-
-
-
-
+//     }
 
 
 //     UserProfileChangeRequest.Builder()

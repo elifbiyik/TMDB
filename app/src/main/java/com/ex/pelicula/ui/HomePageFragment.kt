@@ -2,6 +2,7 @@ package com.ex.pelicula.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -57,7 +58,15 @@ class HomePageFragment : Fragment() {
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
-                p0?.let { viewModel.getFilter(it) }
+                p0?.let {
+
+                    viewModel.filterData(p0).observe(viewLifecycleOwner, Observer {
+                        lifecycleScope.launch {
+                            movieAdapter.submitData(lifecycle, it)
+                        }
+                    })
+
+                }
                 return true
             }
         })
@@ -66,7 +75,9 @@ class HomePageFragment : Fragment() {
 //Last Parameter Call -> lambdayı parantez içine koymadan fonksiyon parametresi olarak iletme.
 // AdapterHomePage(emptyList(), { ... }) ile aynı anlama geliyor.
 
-        movieAdapter = AdapterHomePage(emptyList()) {
+     //   movieAdapter = AdapterHomePage(emptyList()) {
+
+        movieAdapter = AdapterHomePage {
 
             var fragment = DetailFragment()
             var bundle = Bundle()
@@ -74,10 +85,7 @@ class HomePageFragment : Fragment() {
             bundle.putString("name", it.original_title)
             bundle.putString("vote_average", it.vote_average)
             bundle.putString("overview", it.overview)
-            bundle.putString(
-                "imageURL",
-                it.backdrop_path
-            ) // Detail için Poster'i değil backdrop gönderdik.
+            bundle.putString("imageURL", it.backdrop_path) // Detail için Poster'i değil backdrop gönderdik.
             bundle.putString("imagePoster", it.poster_path)  // Favori için poster gönderdik.
             fragment.arguments = bundle
 
@@ -94,49 +102,52 @@ class HomePageFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(HomePageViewModel::class.java)
 
 
-        viewModel.getMoviePopular(1)
-/*
-        lifecycleScope.launch {
-            viewModel.getMoviePopular().observe(viewLifecycleOwner, Observer {
+//        viewModel.getMoviePopular(1)
+
+
+        viewModel.getMoviePopular().observe(viewLifecycleOwner, Observer {
+            lifecycleScope.launch {
                 movieAdapter.submitData(lifecycle, it)
-            })}
-*/
-
-            viewModel.movieMutableList.observe(viewLifecycleOwner, Observer { movies ->
-             movieAdapter.movieList = movies
-             movieAdapter.notifyDataSetChanged()
-             if (movies.isEmpty()) Toast.makeText(
-                 requireContext(),
-                 "Unsuccessful",
-                 Toast.LENGTH_SHORT
-             )
-                 .show()
-             else Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
-         })
+            }
+        })
+        // submitData -> RecyclerView'a bağlar ve yeni veri yüklemesi gerektiğinde otomatik olarak güncelleme yapar.
 
 
-            // Adapterıma yeni liste oluşturmak yerine olan listeye filtrelenmiş haliyle adaptera gönderdik.
-            // ViewModelde Filtrelendi ve MLD'ye atandı
-            viewModel.filteredMutableLiveData.observe(viewLifecycleOwner, Observer {
-                movieAdapter.movieList = it
-                movieAdapter.notifyDataSetChanged()
-                if (it.isEmpty()) Toast.makeText(
-                    requireContext(),
-                    "filteredMutableLiveData Unsuccessful",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-                else Toast.makeText(
-                    requireContext(),
-                    "filteredMutableLiveData Successful",
-                    Toast.LENGTH_SHORT
-                ).show()
-            })
+        /*     viewModel.movieMutableList.observe(viewLifecycleOwner, Observer { movies ->
+              movieAdapter.movieList = movies
+              movieAdapter.notifyDataSetChanged()
+              if (movies.isEmpty()) Toast.makeText(
+                  requireContext(),
+                  "Unsuccessful",
+                  Toast.LENGTH_SHORT
+              )
+                  .show()
+              else Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
+          })*/
 
 
-        }
+        // Adapterıma yeni liste oluşturmak yerine olan listeye filtrelenmiş haliyle adaptera gönderdik.
+        // ViewModelde Filtrelendi ve MLD'ye atandı
+        /*        viewModel.filteredMutableLiveData.observe(viewLifecycleOwner, Observer {
+                    movieAdapter.movieList = it
+                    movieAdapter.notifyDataSetChanged()
+                    if (it.isEmpty()) Toast.makeText(
+                        requireContext(),
+                        "filteredMutableLiveData Unsuccessful",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    else Toast.makeText(
+                        requireContext(),
+                        "filteredMutableLiveData Successful",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                })
+    */
 
     }
+
+}
 
 /*
 // MutableLiveDatadaki filmleri adapter'a gönderdik.

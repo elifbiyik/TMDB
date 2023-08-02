@@ -4,7 +4,6 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.ex.pelicula.R
 
 fun ImageView.ImageLoad(url: String) {
 
@@ -19,10 +18,6 @@ fun downloadImage(view: ImageView, url: String) {
     view.ImageLoad(url)
 }
 
-
-
-/*
-fun ImageView.Color(colorful: String) {
-    setColorFilter(ContextCompat.getColor(context, R.color.colorful))
+fun ImageView.Color(colorful: Int) {
+    setColorFilter(ContextCompat.getColor(context,colorful))
 }
-*/

@@ -42,8 +42,6 @@ class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) 
 
     suspend fun getFavorite(userId: String): List<Movie> {
 
-        Log.d("ROOMVMDetailgetFav", repo.getFavorite(userId).toString())
-
         return withContext(Dispatchers.IO) {
             repo.getFavorite(userId)
         }
@@ -51,7 +49,6 @@ class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) 
 
 
     fun getUser(): String {
-        Log.d("ROOM", repo.getUser().toString())
         return repo.getUser()
     }
 

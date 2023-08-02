@@ -88,7 +88,7 @@ class CommentFragment : Fragment() {
                 }
 
                 bindingItem.btnDelete.setOnClickListener {
-                    delete(myComment, movieId)
+                    delete(myComment, movieId, userId)
                 }
             }
 
@@ -106,7 +106,7 @@ class CommentFragment : Fragment() {
                 }
 
                 bindingItem.btnDelete.setOnClickListener {
-                    delete(myComment, movieId)
+                    delete(myComment, movieId, userId)
 
                 }
             }
@@ -129,18 +129,23 @@ class CommentFragment : Fragment() {
     }
 
 
-    fun delete(myComment: List<Comment>, movieId: Long) {
+    fun delete(myComment: List<Comment>, movieId: Long, userId: String) {
         bindingItem.editTextComment.text.clear()
         bindingItem.rating.rating = 0.0.toFloat()
 
         if (myComment.isNotEmpty()) {
             lifecycleScope.launch(Dispatchers.IO) {
-                viewModel.delete(myComment, movieId) // Delete the comment from RoomDB
+                val currentUserComment = myComment.find { it.userId == userId }
+                if (currentUserComment != null) {
+                    viewModel.delete(
+                        listOf(currentUserComment),
+                        movieId
+                    ) // Kullanıcının kendi yorumunu sil
+                }
             }
+            this.myComment = emptyList()
         }
-        this.myComment = emptyList()
     }
-
 
     fun insertOrUpdate(newComment: String, newPoint: Float, userId: String, movieId: Long) {
         if (newComment.isNotEmpty() && newPoint != 0.0.toFloat()) {

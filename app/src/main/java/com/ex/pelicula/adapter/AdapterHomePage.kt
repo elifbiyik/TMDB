@@ -20,9 +20,15 @@ Normal adapter'dan farklı olarak PagingDataAdapter'ı kalıtım veriyoruz.
  */
 
 /*
+Adapter'a var movieList: List<Movie> vermedik
+ÇÜNKÜ zaten PagingDataAdapter içerisinde verileri yönetecek ve güncellemeleri kontrol edecek otomatik
+
+
+ */
+
 
 class AdapterHomePage(
-    var movieList: List<Movie>,
+   // var movieList: List<Movie>,
     private val onClick: (Movie) -> Unit       //Movie tipinde parametre alır ve bir şey döndürmez
 ) : PagingDataAdapter<Movie, AdapterHomePage.MovieViewHolder>(DiffCallback) {
 
@@ -33,8 +39,10 @@ class AdapterHomePage(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        var movie = movieList[position]
-        holder.bind(movie)
+        var movie = getItem(position) //movieList[position]
+        movie?.let {
+            holder.bind(it)
+        }
     }
 
     inner class MovieViewHolder(private val binding: FragmentHomePageItemBinding) :
@@ -49,6 +57,7 @@ class AdapterHomePage(
         }
     }
 
+    // RecyclerView'de veri değişikliklerini optimize eder
     object DiffCallback: DiffUtil.ItemCallback<Movie>() {
         // İki öge aynı mı ?
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
@@ -60,12 +69,13 @@ class AdapterHomePage(
         }
     }
 }
-*/
 
 
 
 
 
+
+/*
 
 
 class AdapterHomePage(
@@ -101,4 +111,5 @@ class AdapterHomePage(
     }
 }
 
+*/
 
