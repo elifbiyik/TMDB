@@ -1,14 +1,12 @@
 package com.ex.pelicula
 
 import android.util.Log
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.bumptech.glide.load.HttpException
-import com.ex.pelicula.models.GetMoviesResponse
+import com.ex.pelicula.models.FavoriteMovie
 import com.ex.pelicula.models.Movie
 import com.ex.pelicula.repository.RepositoryMovie
-import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 /*
@@ -55,28 +53,33 @@ class MoviePagingDataSource @Inject constructor(
 
         return try {
 
-            val response = repo.getDataPopular(currentPage)
-            val responseBody = response.body()!!.results
-       //     val filter = data.filter { it.original_title.contains(search, ignoreCase = true) }
+            var totalPage = repo.getDataPopular(currentPage.toLong()).body()!!.total_pages
 
+            val response = repo.getDataPopular(currentPage.toLong())
+      //      val response = repo.getPopular(totalPage)
+            val responseBody = response.body()!!.results.sortedByDescending { it.vote_average }
+
+            Log.d("Response", response.toString())
 
             val data =
                 if(search.isNotEmpty()) responseBody.filter { it.original_title.contains(search,ignoreCase = true)}
-                else responseBody.sortedByDescending { it.vote_average }
+                else responseBody
 
-// Tek bir LoadResult olmalı bu yüzden if ile datayı aldık.
+
+
+            val res = repo. getDataPopular1().body()!!.results.sortedByDescending { it.vote_average }
+
+
+
+
+
          LoadResult.Page(
-                data = data,
+                data = res,
                 prevKey = if (currentPage == 1) null else currentPage.minus(1),
                 nextKey = currentPage.plus(1)
             )
 
-  /*          LoadResult.Page(
-                data = filter,
-                prevKey = if (currentPage == 1) null else currentPage.minus(1),
-                nextKey = currentPage.plus(1)
-            )
-*/
+
 
         } catch (e: Exception) {
             LoadResult.Error(e)

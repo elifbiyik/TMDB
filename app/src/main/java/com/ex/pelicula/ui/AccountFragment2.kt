@@ -55,7 +55,6 @@ class AccountFragment2 : Fragment() {
         super.onPause()
 
         lifecycleScope.launch {
-            Log.d("imageuri", imageUri.toString())
             viewModel.updateUserProfilePhoto(imageUri)
         }
     }
@@ -77,6 +76,14 @@ class AccountFragment2 : Fragment() {
 
         binding.accEmail.isEnabled = false
         binding.accName.isEnabled = false
+
+
+        binding.signOut.setOnClickListener {
+
+            viewModel.signOut()
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.constraint, SignInFragment()).commit()
+        }
+
 
 
 

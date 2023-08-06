@@ -5,7 +5,7 @@
     <data>
         <variable
             name="favMovie"
-            type="com.ex.pelicula.models.Movie" />
+            type="com.ex.pelicula.models.FavoriteMovie" />
     </data>
 
     <androidx.cardview.widget.CardView

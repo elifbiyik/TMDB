@@ -78,9 +78,14 @@ class CommentFragment : Fragment() {
 
             if (myComment.isNotEmpty()) {
 
-                bindingItem.editTextComment.setText(myComment[0].comment)
+             //   bindingItem.editTextComment.setText(myComment[0].comment)
+                bindingItem.editTextComment.hint = myComment[0].comment
+
                 bindingItem.rating.rating = myComment[0].point.toFloat()
                 bindingItem.btnDelete.isEnabled = true
+
+
+
 
 
                 bindingItem.btnSend.setOnClickListener {

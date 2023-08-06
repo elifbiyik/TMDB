@@ -31,6 +31,7 @@ class AdapterComment(var commentList: List<Comment>) :
         fun bind(comments: Comment) {
             with(binding) {
                 comment = comments
+
                 executePendingBindings()
 
                 txtName.text = comments.userEmail

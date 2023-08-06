@@ -57,6 +57,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/edit"
                     app:layout_constraintVertical_bias="0.933" />
 
+                <ImageView
+                    android:id="@+id/signOut"
+                    android:layout_width="34dp"
+                    android:layout_height="33dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/edit"
+                    app:layout_constraintHorizontal_bias="0.052"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.067"
+                    app:srcCompat="@drawable/logout" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -82,7 +82,7 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
     }
 
     fun currentUser(): String {
-        return auth.currentUser!!.uid
+        return auth.currentUser?.uid ?: ""
     }
     fun currentUserEmail(): String {
         return auth.currentUser!!.email!!
@@ -105,18 +105,15 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
 
     fun getPhotoFor2(imageUri: Uri?): Task<Uri> {
 
-        var uid = auth.currentUser!!.uid
-
+        var uid = auth.currentUser?.uid
         val storageReference = FirebaseStorage.getInstance()
         var imageReference = storageReference.reference.child("images/$uid.jpg")
 
         imageUri?.let { imageReference.putFile(it) }
-
-
         var profile = UserProfileChangeRequest.Builder()
             .setPhotoUri(imageUri)
             .build()
-        auth.currentUser!!.updateProfile(profile)
+        auth.currentUser?.updateProfile(profile)
 
         return imageReference.downloadUrl
 
@@ -128,6 +125,16 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
         val imageReference = FirebaseStorage.getInstance().reference.child("images/$uid.jpg")
         return imageReference.downloadUrl
     }
+
+    fun signOut(){
+        auth.signOut()
+    }
+
+
+
+
+
+
 
 
 }

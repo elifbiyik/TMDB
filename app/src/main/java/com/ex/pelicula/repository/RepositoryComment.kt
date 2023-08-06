@@ -2,7 +2,6 @@ package com.ex.pelicula.repository
 
 import com.ex.pelicula.db.CommentDao
 import com.ex.pelicula.models.Comment
-import com.ex.pelicula.models.Movie
 import javax.inject.Inject
 
 

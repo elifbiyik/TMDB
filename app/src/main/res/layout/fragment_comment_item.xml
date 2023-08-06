@@ -74,8 +74,21 @@
                 android:layout_height="22dp"
                 android:layout_marginEnd="8dp"
                 android:textColor="@color/purple"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/txt_comment"
+                app:layout_constraintEnd_toStartOf="@+id/txt_point"
+                app:layout_constraintHorizontal_bias="0.98"
+                app:layout_constraintStart_toEndOf="@+id/txt_name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.120000005"
+                app:srcCompat="@drawable/star" />
 
             <!--                    android:text="@{comment.point}"-->
 

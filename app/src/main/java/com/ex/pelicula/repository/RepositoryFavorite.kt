@@ -2,8 +2,7 @@ package com.ex.pelicula.repository
 
 import android.util.Log
 import com.ex.pelicula.db.FavoriteDao
-import com.ex.pelicula.models.Movie
-import com.google.firebase.auth.FirebaseUser
+import com.ex.pelicula.models.FavoriteMovie
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -11,20 +10,17 @@ import javax.inject.Singleton
 class RepositoryFavorite @Inject constructor(private val favoriteDao: FavoriteDao , private val repoUser: RepositoryUser
 ) {
 
-
-
-
     //  private var list: ArrayList<Movie> = ArrayList()
 
-   suspend fun addFavorite(movie: Movie) {
+   suspend fun addFavorite(movie: FavoriteMovie) {
             favoriteDao.insert(movie)
     }
 
-    suspend fun removeFavorite(movie: Movie) {
+    suspend fun removeFavorite(movie: FavoriteMovie) {
             favoriteDao.delete(movie)
     }
 
-    suspend fun getFavorite(userId : String): List<Movie> {
+    suspend fun getFavorite(userId : String): List<FavoriteMovie> {
         Log.d("ROOMRepositoryFav", repoUser.getUser().toString())
             return favoriteDao.getAll(userId)
 

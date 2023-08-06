@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -29,14 +31,17 @@ class SignInFragment : Fragment() {
     lateinit var bottomNav : BottomNavigationView
 
 
-    override fun onCreateView(
+
+        override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
 
+
         bottomNav = requireActivity().findViewById(R.id.bottomNavigationView)
         bottomNav.visibility = View.GONE
+
 
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_in, container, false)

@@ -1,15 +1,15 @@
 package com.ex.pelicula.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.ex.pelicula.models.Movie
+import com.ex.pelicula.models.FavoriteMovie
 
 
-@Database(entities = [Movie::class], version = 8)
+
+@Database(entities = [FavoriteMovie::class], version = 11)
 abstract class AppDatabase : RoomDatabase() {
      abstract fun favoritedao() : FavoriteDao
+
 }
 
 // allowMainThreadQueries() -> ana iş parçacığında veritabanı sorgularının yapılmasına izin verir

@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import com.ex.pelicula.db.AppDatabase
 import com.ex.pelicula.db.AppDatabaseComment
+import com.ex.pelicula.db.AppDatabaseMovie
 import com.ex.pelicula.db.CommentDao
 
 import com.ex.pelicula.db.FavoriteDao
+import com.ex.pelicula.db.MovieDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,9 +46,6 @@ object RoomModule {
         return appDatabase.favoritedao()
     }
 
-
-
-
     @Provides
     @Singleton
     fun providesAppDatabaseComment (@ApplicationContext context: Context) : AppDatabaseComment {
@@ -59,5 +58,20 @@ object RoomModule {
     fun providesCommentDao (appDatabasecomment : AppDatabaseComment) : CommentDao {
         return appDatabasecomment.commentDao()
     }
+
+
+    @Provides
+    @Singleton
+    fun providesAppDatabaseMovie(@ApplicationContext context: Context) : AppDatabaseMovie {
+        return Room.databaseBuilder(context, AppDatabaseMovie::class.java, "movie.db").fallbackToDestructiveMigration().build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesMovieDao(appDatabaseMovie: AppDatabaseMovie) : MovieDao{
+        return appDatabaseMovie.movieDao()
+    }
+
+
 
 }

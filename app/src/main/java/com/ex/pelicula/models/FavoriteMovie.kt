@@ -2,14 +2,11 @@ package com.ex.pelicula.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-
-@Entity(tableName = "Movie")
-data class Movie(
+@Entity(tableName = "Favorite", primaryKeys = ["id","userId"])
+data class FavoriteMovie(
 
     @ColumnInfo(name = "id")
-    @PrimaryKey
     var id: Long,
     var original_language: String?,
 
@@ -33,7 +30,21 @@ data class Movie(
     @ColumnInfo(name = "vote_average")
     var vote_average: String?,
     var vote_count: Int?,
+
+    @ColumnInfo(name = "userId")
+    var userId: String
+
+    /*
+        // Apide bu özellik yok. Room için bu ekle ??
+        @ColumnInfo(name = "userId")
+        var userId: String?
+        */
+
+
+
+
 )
+
 
 
 /*
@@ -49,4 +60,3 @@ data class Movie(
 "vote_average": 7.3,
 "vote_count": 1813
 */
-

@@ -61,6 +61,11 @@ class AccountViewModel2 @Inject constructor(
         repo.getProfile().addOnSuccessListener {
             profilMutableLiveData.value = it
         }
-
     }
+
+    fun signOut(){
+        repo.signOut()
+    }
+
+
 }

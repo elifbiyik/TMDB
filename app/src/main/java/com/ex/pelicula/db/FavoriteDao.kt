@@ -1,24 +1,23 @@
 package com.ex.pelicula.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.ex.pelicula.models.Movie
+import com.ex.pelicula.models.FavoriteMovie
 
 @Dao
 interface FavoriteDao {
 
     @Insert
-    suspend fun insert (favorite : Movie)
+    suspend fun insert (favorite : FavoriteMovie)
 
     @Delete
-    suspend fun delete (favorite : Movie)
+    suspend fun delete (favorite : FavoriteMovie)
 
 
     @Query ("SELECT *FROM Favorite WHERE userId = :userId")
-    suspend fun getAll (userId: String) : List<Movie>
+    suspend fun getAll (userId: String) : List<FavoriteMovie>
 
 
 

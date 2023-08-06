@@ -1,13 +1,10 @@
 package com.ex.pelicula.viewModel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ex.pelicula.models.Movie
+import com.ex.pelicula.models.FavoriteMovie
 import com.ex.pelicula.repository.RepositoryFavorite
-import com.ex.pelicula.repository.RepositoryUser
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,9 +15,9 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) : ViewModel() {
 
 
-    var favMutableLiveData = MutableLiveData<List<Movie>>()
+    var favMutableLiveData = MutableLiveData<List<FavoriteMovie>>()
 
-    fun addFavorite(movie: Movie, userId: String) {
+    fun addFavorite(movie: FavoriteMovie, userId: String) {
         viewModelScope.launch {
             repo.addFavorite(movie)
             favMutableLiveData.value = repo.getFavorite(userId)
@@ -28,7 +25,7 @@ class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) 
         }
     }
 
-    fun removeFavorite(movieList: Movie, userId: String) {
+    fun removeFavorite(movieList: FavoriteMovie, userId: String) {
         viewModelScope.launch {
             repo.removeFavorite(movieList)
             favMutableLiveData.value = repo.getFavorite(userId)
@@ -40,7 +37,7 @@ class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) 
 // Veritabanı işlemleri gibi I/O yoğun işlemler için withContext(Dispatchers.IO) kul.
 
 
-    suspend fun getFavorite(userId: String): List<Movie> {
+    suspend fun getFavorite(userId: String): List<FavoriteMovie> {
 
         return withContext(Dispatchers.IO) {
             repo.getFavorite(userId)

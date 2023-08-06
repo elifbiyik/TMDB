@@ -46,6 +46,14 @@ class SignInViewModel @Inject constructor(
 
         }
     }
+
+    fun getCurrentUserUID (): String? {
+        return repo.currentUser()
+    }
+
+
+
+
 }
 
 

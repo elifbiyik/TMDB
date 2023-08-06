@@ -9,7 +9,6 @@ import com.ex.pelicula.databinding.FragmentHomePageItemBinding
 import com.ex.pelicula.models.Movie
 
 
-
 /*
 Normal adapter'dan farklı olarak PagingDataAdapter'ı kalıtım veriyoruz.
 2 parametre veriliyor. <Model calss, ViewHolder>

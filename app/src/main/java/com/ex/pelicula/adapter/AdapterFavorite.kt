@@ -3,22 +3,18 @@ package com.ex.pelicula.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.ex.pelicula.R
 import com.ex.pelicula.databinding.FragmentFavItemBinding
-import com.ex.pelicula.databinding.FragmentHomePageItemBinding
-import com.ex.pelicula.models.Movie
+import com.ex.pelicula.models.FavoriteMovie
 
-class AdapterFavorite(var list: List<Movie>,
-                        private val onClick: (Movie) -> Unit)  :
+class AdapterFavorite(var list: List<FavoriteMovie>,
+                      private val onClick: (FavoriteMovie) -> Unit)  :
     RecyclerView.Adapter<AdapterFavorite.ViewHolder>() {
 
 
     inner class ViewHolder(var binding: FragmentFavItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-            fun bind(favList: Movie) {
+            fun bind(favList: FavoriteMovie) {
 
             with(binding) {
                 favMovie = favList

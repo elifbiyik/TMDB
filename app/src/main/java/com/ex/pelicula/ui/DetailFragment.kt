@@ -8,14 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.ex.pelicula.R
 import com.ex.pelicula.databinding.FragmentDetailBinding
-import com.ex.pelicula.models.Movie
+import com.ex.pelicula.models.FavoriteMovie
 import com.ex.pelicula.util.Color
 import com.ex.pelicula.util.ImageLoad
 
@@ -28,7 +27,7 @@ class DetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: DetailViewModel by viewModels()
-    private lateinit var favMovies: Movie
+    private lateinit var favMovies: FavoriteMovie
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +72,7 @@ class DetailFragment : Fragment() {
 
             var list = viewModel.getFavorite(userId)
 
-            favMovies = Movie(
+            favMovies = FavoriteMovie(
                 id,
                 null,
                 movieImage,

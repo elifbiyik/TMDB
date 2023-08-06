@@ -2,31 +2,29 @@ package com.ex.pelicula.viewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagedList
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
 import com.ex.pelicula.MoviePagingDataSource
-import com.ex.pelicula.models.GetMoviesResponse
+import com.ex.pelicula.db.AppDatabaseMovie
+import com.ex.pelicula.models.FavoriteMovie
 import com.ex.pelicula.models.Movie
 import com.ex.pelicula.repository.RepositoryMovie
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.await
+import okio.utf8Size
 import javax.inject.Inject
 
 
-
 @HiltViewModel
-class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) : ViewModel() {
+class HomePageViewModel @Inject constructor(
+    private val repo: RepositoryMovie,
+    private val databaseMovie: AppDatabaseMovie
+) : ViewModel() {
 
     // MLD -> düzenlenebiliyor.
     // LD -> sadece okunuyor.
@@ -53,7 +51,6 @@ class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) :
 // PagingConfig sınıfından nesne
 
 
-
     // Pager sınıfı kullanılarak sayfa yapılandırılır.
     // PagingConfig yüklemek için kullanılacak sayfa boyutu. Her sayfada yalnızca 1 öğe yüklenir.
     // Eğer sayfa boyutu düşükse, sayfalamada daha az öğe yüklenir ve kullanıcı daha sık sayfa değiştirmek zorunda kalabilir.
@@ -66,18 +63,20 @@ class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) :
 
 
 
-
+// PagingData LiveDataya dönüştürülür.
     fun getMoviePopular(): LiveData<PagingData<Movie>> {
-        return (Pager(PagingConfig(1)) {
-            MoviePagingDataSource(repo,"" )     //Veri kaynağı yönetilir. Veri kaynağı = repo
-        }.liveData.cachedIn(viewModelScope))
+       return  (Pager(
+            config = PagingConfig(1),
+ //    remoteMediator = MovieRemoteMediator(repo, databaseMovie),
+            pagingSourceFactory = {MoviePagingDataSource(repo,"")} //Veri kaynağı yönetilir. Veri kaynağı = repo
+        )
+                ).liveData.cachedIn(viewModelScope)
     }
 
 
+    fun filterData(search: String): LiveData<PagingData<Movie>> {
 
-    fun filterData(search : String) : LiveData<PagingData<Movie>> {
-
-        return (Pager(PagingConfig(1)){
+        return (Pager(PagingConfig(1)) {
             MoviePagingDataSource(repo, search)
         }.liveData)
 
@@ -113,16 +112,16 @@ class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) :
             })
         }
     */
-/*
+    /*
 
 
-    fun getFilter(search: String) {
-          if (search.isBlank()) {
-              filteredMutableLiveData.value = movieMutableList.value
-          } else {
-              filteredMutableLiveData.value = movieMutableList.value?.filter { it.original_title.contains(search, ignoreCase = true) }
-          }}
-*/
+        fun getFilter(search: String) {
+              if (search.isBlank()) {
+                  filteredMutableLiveData.value = movieMutableList.value
+              } else {
+                  filteredMutableLiveData.value = movieMutableList.value?.filter { it.original_title.contains(search, ignoreCase = true) }
+              }}
+    */
 
     // movieMutableList'imdeki verileri alıyor.
     // Verileri filtreliyor.
