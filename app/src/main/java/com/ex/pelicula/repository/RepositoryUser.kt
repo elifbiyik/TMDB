@@ -3,6 +3,7 @@ package com.ex.pelicula.repository
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import com.ex.pelicula.models.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -67,39 +68,48 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
 
         return auth.currentUser
 
-        Log.d("ROOM", auth.currentUser.toString())
-
-//        var userEmail = user!!.email
-//        var userName = user.displayName
-//
-//
-//        var list = listOf(userEmail, userName)
-//
-//        Log.d("displayName", userName.toString())
-//
-//        return list as List<String>
-
     }
 
     fun currentUser(): String {
         return auth.currentUser?.uid ?: ""
     }
+
     fun currentUserEmail(): String {
         return auth.currentUser!!.email!!
     }
 
 
     @SuppressLint("SuspiciousIndentation")
-    fun updateUserEmailAndName(newEmail: String, newName: String) {
+    suspend fun updateUserEmailAndName(newEmail: String, newName: String) {
 
         var user = auth.currentUser!!
-        var email = user.updateEmail(newEmail)
-        var name = UserProfileChangeRequest.Builder()
+
+       var email =
+            user.updateEmail(newEmail)
+
+        var newName = UserProfileChangeRequest.Builder()
             .setDisplayName(newName)
             .build()
+        user.updateProfile(newName)
 
-        user.updateProfile(name)
 
+        Log.d("Email", email.toString())
+
+
+
+ /*       email.addOnCompleteListener {
+            if(it.isSuccessful) Log.d("UpdateEmail", "UpdateEmail")
+            else Log.d("UpdateEmail", "else")
+        }*/
+
+
+
+        try {
+            user.updateEmail(newEmail)
+        }
+        catch (e:Exception){
+            Log.d("UpdateEmail", e.message.toString())
+        }
     }
 
 
@@ -126,18 +136,14 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
         return imageReference.downloadUrl
     }
 
-    fun signOut(){
+    fun signOut() {
         auth.signOut()
     }
 
 
-
-
-
-
-
-
 }
+
+
 
 
 /*  fun setProfilePhoto(

@@ -36,7 +36,7 @@ class AccountViewModel2 @Inject constructor(
 
     }
 
-    fun updateUser(newEmail: String, newName: String) {
+    suspend fun updateUser(newEmail: String, newName: String) {
         repo.updateUserEmailAndName(newEmail, newName)
 
     }
@@ -47,7 +47,8 @@ class AccountViewModel2 @Inject constructor(
         //Type mismatch: inferred type is Task<Uri> but Uri? was expected
         //      profilMutableLiveData.value = repo.getPhotoFor2(imageUri)     // Neden böyle yazarken hata veriyorda aşağıdaki gibi yazınca vermiyor ?
 
-        //MLD'de googleden gidebilmelik kaydediyor
+        //MLD'de googleden gidebilmelik adresi kaydediyor
+
           repo.getPhotoFor2(imageUri).addOnSuccessListener { uri ->
                profilMutableLiveData.value = uri
            } .addOnFailureListener { exception ->

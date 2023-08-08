@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.ex.pelicula.models.FavoriteMovie
 
 @Dao
-interface FavoriteDao {
+interface DaoFavorite {
 
     @Insert
     suspend fun insert (favorite : FavoriteMovie)

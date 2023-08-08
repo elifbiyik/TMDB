@@ -53,7 +53,7 @@ class MoviePagingDataSource @Inject constructor(
 
         return try {
 
-            var totalPage = repo.getDataPopular(currentPage.toLong()).body()!!.total_pages
+    //        var totalPage = repo.getDataPopular(currentPage.toLong()).body()!!.total_pages
 
             val response = repo.getDataPopular(currentPage.toLong())
       //      val response = repo.getPopular(totalPage)
@@ -67,14 +67,14 @@ class MoviePagingDataSource @Inject constructor(
 
 
 
-            val res = repo. getDataPopular1().body()!!.results.sortedByDescending { it.vote_average }
+      //      val res = repo. getDataPopular1().body()!!.results.sortedByDescending { it.vote_average }
 
 
 
 
 
          LoadResult.Page(
-                data = res,
+                data = data,
                 prevKey = if (currentPage == 1) null else currentPage.minus(1),
                 nextKey = currentPage.plus(1)
             )

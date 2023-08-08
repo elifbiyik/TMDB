@@ -29,6 +29,8 @@ class DetailFragment : Fragment() {
     private val viewModel: DetailViewModel by viewModels()
     private lateinit var favMovies: FavoriteMovie
 
+    private lateinit var list: List<FavoriteMovie>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +72,8 @@ class DetailFragment : Fragment() {
 
         lifecycleScope.launch {
 
-            var list = viewModel.getFavorite(userId)
+            list = viewModel.getFavorite(userId)
+            Log.d("ListDetail1", list.toString())
 
             favMovies = FavoriteMovie(
                 id,
@@ -89,11 +92,6 @@ class DetailFragment : Fragment() {
             )
 
 
-            Log.d("favMovie", favMovies.toString())
-
-            //   var list = viewModel.isMovieInFavorites(favMovies) // Listin boş olup olmadığına bakmak için yazmıştım ama vm'de bakıyor zaten.
-
-
             if (isFavorite == true) {
                 binding.detailfavorite.Color(R.color.Red)
             }
@@ -105,32 +103,52 @@ class DetailFragment : Fragment() {
 
             binding.detailfavorite.setOnClickListener {
 
-                if (list.contains(favMovies)) {
-                    binding.detailfavorite.Color(R.color.black)
-                    viewModel.removeFavorite(favMovies, userId)
+                lifecycleScope.launch {
+                    list = viewModel.getFavorite(userId)
+
+                    Log.d("ListDetail2", list.toString())
+
+                    if (list.contains(favMovies)) {
+                        binding.detailfavorite.Color(R.color.black)
+                        viewModel.removeFavorite(favMovies, userId)
+                    } else if (isFavorite == true) {
+                        binding.detailfavorite.Color(R.color.black)
+                        viewModel.removeFavorite(favMovies, userId)
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.constraint, FavoriteFragment()).addToBackStack(null)
+                            .commit()
+
+                    } else {
+                        binding.detailfavorite.Color(R.color.Red)
+                        viewModel.addFavorite(favMovies, userId)
+                    }
                 }
-                else if (isFavorite == true) {
-                    binding.detailfavorite.Color(R.color.black)
-                    viewModel.removeFavorite(favMovies, userId)
 
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.constraint, FavoriteFragment()).commit()
 
-                } else {
-                    binding.detailfavorite.Color(R.color.Red)
+/*
+                viewModel.favMutableLiveData.observe(viewLifecycleOwner, Observer { list ->
 
-                    viewModel.addFavorite(favMovies, userId)
-                }
+                    if (!list.contains(favMovies)) {
+                        binding.detailfavorite.Color(R.color.Red)
+                        viewModel.addFavorite(favMovies, userId)
+                    }
+                    else {
+                        binding.detailfavorite.Color(R.color.black)
+                        viewModel.removeFavorite(favMovies, userId)
+                    }
+                })
+*/
+
 
             }
+
         }
 
 
         binding.comment.setOnClickListener {
 
-
             // Comment sayfasına at -> detayına girdiğin bilgiler
-
 
             var fragment = CommentFragment()
             var bundle = Bundle()
@@ -138,35 +156,33 @@ class DetailFragment : Fragment() {
             bundle.putString("name", movieName)
             bundle.putString("userId", userId)
 
-            bundle.putString("userEmail", userEmail )
+            bundle.putString("userEmail", userEmail)
 
             fragment.arguments = bundle
 
-
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.constraint, fragment)
+                .addToBackStack(null)
                 .commit()
-
-
         }
-
-
 
 
 
         viewModel.favMutableLiveData.observe(viewLifecycleOwner, Observer { list ->
 
-            Log.d("viewModel.favMutableLiveData.observe", list.toString())
-
-            if (!list.contains(favMovies)) {
-
-                Toast.makeText(requireContext(), " Silindi  ", Toast.LENGTH_SHORT).show()
-
-// bundle ile göndermeye gerek var mı direkt VM'den listeyi Favori fragmentına çekebiliriz ??
-
-            } else Toast.makeText(requireContext(), "Eklendi ", Toast.LENGTH_SHORT).show()
+            if (!list.contains(favMovies)) Toast.makeText(
+                requireContext(),
+                "Deleted from your favorite list  ",
+                Toast.LENGTH_SHORT
+            ).show()
+            else Toast.makeText(
+                requireContext(),
+                "Added to your favorite list ",
+                Toast.LENGTH_SHORT
+            ).show()
 
         })
+
 
 
         return binding.root

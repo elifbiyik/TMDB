@@ -28,7 +28,7 @@ class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
     private val viewModel: SignUpViewModel by viewModels()
 
-    lateinit var bottomNav : BottomNavigationView
+    lateinit var bottomNav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,6 @@ class SignUpFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up, container, false)
 
-          binding.user = viewModel // user değişkeni vm'ye atandı
         binding.lifecycleOwner = this //Lifecycle'ı doğru şekilde takp edecek
 
 
@@ -60,9 +59,9 @@ class SignUpFragment : Fragment() {
 
 
             lifecycleScope.launch {
-            viewModel.signUp(email, password, name, lastName)
-
-        }}
+                viewModel.signUp(email, password, name, lastName)
+            }
+        }
 
 
 
@@ -71,6 +70,7 @@ class SignUpFragment : Fragment() {
                 Toast.makeText(requireContext(), "Successful", Toast.LENGTH_SHORT).show()
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.constraint, SignInFragment())
+                    .addToBackStack(null)
                     .commit()
             } else Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
 

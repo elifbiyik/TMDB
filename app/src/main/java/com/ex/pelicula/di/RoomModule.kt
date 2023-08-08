@@ -2,13 +2,13 @@ package com.ex.pelicula.di
 
 import android.content.Context
 import androidx.room.Room
-import com.ex.pelicula.db.AppDatabase
+import com.ex.pelicula.db.AppDatabaseFavorite
 import com.ex.pelicula.db.AppDatabaseComment
 import com.ex.pelicula.db.AppDatabaseMovie
-import com.ex.pelicula.db.CommentDao
+import com.ex.pelicula.db.DaoComment
 
-import com.ex.pelicula.db.FavoriteDao
-import com.ex.pelicula.db.MovieDao
+import com.ex.pelicula.db.DaoFavorite
+import com.ex.pelicula.db.DaoMovie
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,8 +23,8 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, "favorite.db").fallbackToDestructiveMigration()
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabaseFavorite {
+        return Room.databaseBuilder(context, AppDatabaseFavorite::class.java, "favorite.db").fallbackToDestructiveMigration()
             .build()
     }
 
@@ -42,8 +42,8 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideFavoriteDao(appDatabase: AppDatabase): FavoriteDao {
-        return appDatabase.favoritedao()
+    fun provideFavoriteDao(appDatabaseFavorite: AppDatabaseFavorite): DaoFavorite {
+        return appDatabaseFavorite.favoritedao()
     }
 
     @Provides
@@ -55,7 +55,7 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun providesCommentDao (appDatabasecomment : AppDatabaseComment) : CommentDao {
+    fun providesCommentDao (appDatabasecomment : AppDatabaseComment) : DaoComment {
         return appDatabasecomment.commentDao()
     }
 
@@ -68,7 +68,7 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun providesMovieDao(appDatabaseMovie: AppDatabaseMovie) : MovieDao{
+    fun providesMovieDao(appDatabaseMovie: AppDatabaseMovie) : DaoMovie{
         return appDatabaseMovie.movieDao()
     }
 

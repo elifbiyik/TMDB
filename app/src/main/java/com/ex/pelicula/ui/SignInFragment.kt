@@ -67,9 +67,8 @@ class SignInFragment : Fragment() {
 
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.constraint, HomePageFragment())
+                    .addToBackStack(null)
                     .commit()
-
-
             } else Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
 
         })
@@ -78,33 +77,13 @@ class SignInFragment : Fragment() {
         binding.signUp.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.constraint, SignUpFragment())
+                .addToBackStack(null)
                 .commit()
         }
-
 
         return binding.root
     }
 }
-
-
-/*
-class SignInViewModelFactory(private val repo: SignInRepo) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
-            return SignInViewModel(repo) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }*/
-
-
-//     viewModel = ViewModelProvider(requireActivity()).get(SignInViewModel::class.java)
-//Doğrudan SignInViewModel sınıfından alıyor
-//SignInViewModel bağımlılığı var ( Repo ) bu yüzden bunu kullanamazsın !! Factory kullanabilirsin
-
-//     val repository = Repository()
-//       viewModel = ViewModelProvider(this, SignInViewModelFactory(repository)).get(SignInViewModel::class.java)
-//SıgnIn'den viewModel oluşturmak için SıgnRepo'yu da kullanmamız gerekiyor
-// Hilt kullanmasaydın bunu kullanacaktın.
 
 
 

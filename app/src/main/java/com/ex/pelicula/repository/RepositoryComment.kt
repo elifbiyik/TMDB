@@ -1,11 +1,11 @@
 package com.ex.pelicula.repository
 
-import com.ex.pelicula.db.CommentDao
+import com.ex.pelicula.db.DaoComment
 import com.ex.pelicula.models.Comment
 import javax.inject.Inject
 
 
-class RepositoryComment @Inject constructor(var commentDao: CommentDao){
+class RepositoryComment @Inject constructor(var commentDao: DaoComment){
 
 
     suspend fun insert (comment : Comment){

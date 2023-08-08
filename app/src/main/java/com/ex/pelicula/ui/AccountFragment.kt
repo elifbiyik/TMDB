@@ -116,9 +116,9 @@ class AccountFragment : Fragment() {
                 binding.editImage.visibility = View.GONE
 
 
-                viewModel.updateUser(newEmail, newName) // Firebaseye kaydetme işlemi
 
                 lifecycleScope.launch {
+                    viewModel.updateUser(newEmail, newName) // Firebaseye kaydetme işlemi
                     Log.d("imageuri", imageUri.toString())
                     viewModel.updateUserProfilePhoto(imageUri?: Uri.EMPTY)
                 }

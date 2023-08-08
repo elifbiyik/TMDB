@@ -35,7 +35,7 @@ class AccountViewModel @Inject constructor(
 
     }
 
-    fun updateUser(newEmail: String, name: String) {
+    suspend fun updateUser(newEmail: String, name: String) {
         repo.updateUserEmailAndName(newEmail, name)
 
     }

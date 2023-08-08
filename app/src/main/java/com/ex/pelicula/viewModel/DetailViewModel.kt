@@ -1,5 +1,6 @@
 package com.ex.pelicula.viewModel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,7 +30,6 @@ class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) 
         viewModelScope.launch {
             repo.removeFavorite(movieList)
             favMutableLiveData.value = repo.getFavorite(userId)
-
         }
     }
 

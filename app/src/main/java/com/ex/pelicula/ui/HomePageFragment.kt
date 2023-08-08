@@ -53,10 +53,12 @@ class HomePageFragment : Fragment() {
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
+// onQueryTextSubmit ->Eğer kelimeyi yazdıktan sonra aramk istiyorsam bu method kullanılır.
+// onQueryTextChange -> eğer her harfi yazdığında aramsını istiyorsam bu method kullanılır.
+
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return false
             }
-
             override fun onQueryTextChange(p0: String?): Boolean {
                 p0?.let {
 

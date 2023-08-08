@@ -48,9 +48,8 @@ class AccountFragment2 : Fragment() {
     }
 
 
-
-// onPause -> Kullanıcı arayüzünden çıkıldığında yaypılan işlemler
-// Galeriden resim seçmek için arayüzden çıkılıyor. AMA SEÇTİĞİM RESMİN DEĞİL ÖNCEKİ RESMİN GELMESİ İLE İLGİSİ NE ?
+    // onPause -> Kullanıcı arayüzünden çıkıldığında yaypılan işlemler
+// Galeriden resim seçmek için arayüzden çıkılıyor. ve bir daha onCreateView girmiyor bu yüzden onPause'da yazdık .
     override fun onPause() {
         super.onPause()
 
@@ -58,7 +57,6 @@ class AccountFragment2 : Fragment() {
             viewModel.updateUserProfilePhoto(imageUri)
         }
     }
-
 
 
     override fun onCreateView(
@@ -81,9 +79,9 @@ class AccountFragment2 : Fragment() {
         binding.signOut.setOnClickListener {
 
             viewModel.signOut()
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.constraint, SignInFragment()).commit()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.constraint, SignInFragment()).addToBackStack(null).commit()
         }
-
 
 
 
@@ -100,7 +98,10 @@ class AccountFragment2 : Fragment() {
                 binding.edit.text = "Edit"
                 binding.editImage.visibility = View.GONE
 
-                viewModel.updateUser(newEmail, newName) // Firebaseye kaydetme işlemi
+                lifecycleScope.launch { // Firebase işlemleri asenkron
+                    viewModel.updateUser(newEmail, newName) // Firebaseye kaydetme işlemi
+                }
+                Toast.makeText(context, " Update", Toast.LENGTH_SHORT).show()
 
 
             } else {
@@ -141,18 +142,14 @@ class AccountFragment2 : Fragment() {
 
         viewModel.userMutableLiveData.observe(viewLifecycleOwner, Observer { user ->
             if (user !== null) {
-
                 binding.accEmail.setText(user.email)
                 binding.accName.setText(user.displayName)
-
-
             } else Toast.makeText(context, " Null", Toast.LENGTH_SHORT).show()
         })
         viewModel.profilMutableLiveData.observe(viewLifecycleOwner, Observer { uri ->
             Glide.with(requireContext())
                 .load(uri)
                 .into(binding.accIm)
-            Toast.makeText(context, " Glide", Toast.LENGTH_SHORT).show()
         })
 
 
@@ -210,12 +207,6 @@ class AccountFragment2 : Fragment() {
         }
     }
 }
-
-
-
-
-
-
 
 
 //onActivityResult : eski ve geleneksel startActivityForResult ve onActivityResult yöntemleridir

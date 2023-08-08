@@ -71,21 +71,16 @@ class CommentFragment : Fragment() {
 
 
 
-        lifecycleScope.launch {
+        lifecycleScope.launch {   // getAll ve getCommentAndRating için coroutine kullandık
 
             listComment = viewModel.getAll(movieId)
             myComment = viewModel.getCommentAndRating(movieId, userId)
 
             if (myComment.isNotEmpty()) {
 
-             //   bindingItem.editTextComment.setText(myComment[0].comment)
+                //   bindingItem.ediTextComment.setText(myComment[0].comment)
                 bindingItem.editTextComment.hint = myComment[0].comment
-
                 bindingItem.rating.rating = myComment[0].point.toFloat()
-                bindingItem.btnDelete.isEnabled = true
-
-
-
 
 
                 bindingItem.btnSend.setOnClickListener {
@@ -98,12 +93,9 @@ class CommentFragment : Fragment() {
                 bindingItem.btnDelete.setOnClickListener {
                     delete(myComment, movieId, userId)
                 }
-            }
+            } else {
 
-
-            else {
-
-                bindingItem.editTextComment.text.clear()
+                bindingItem.editTextComment.hint = ""
                 bindingItem.rating.rating = 0.0.toFloat()
                 bindingItem.btnSend.setOnClickListener {
                     lifecycleScope.launch {
@@ -155,17 +147,30 @@ class CommentFragment : Fragment() {
         }
     }
 
-    fun insertOrUpdate(newComment: String, newPoint: Float, userId: String, movieId: Long, userEmail : String) {
+    fun insertOrUpdate(
+        newComment: String,
+        newPoint: Float,
+        userId: String,
+        movieId: Long,
+        userEmail: String
+    ) {
         if (newComment.isNotEmpty() && newPoint != 0.0.toFloat()) {
             lifecycleScope.launch(Dispatchers.IO) {
-                val getCommentAndRating =
-                    viewModel.getCommentAndRating(movieId, userId)    // Kullanıcının yorum ve puanı
+                val getCommentAndRating = viewModel.getCommentAndRating(movieId, userId)    // Kullanıcının yorum ve puanı
                 if (getCommentAndRating.isNotEmpty()) {
-
                     viewModel.updateComment(userId, movieId, newComment, newPoint, userEmail)
                 } else {
 
-                    viewModel.insert(Comment(null, userId,userEmail, movieId, newComment, newPoint.toInt()), movieId)
+                    viewModel.insert(
+                        Comment(
+                            null,
+                            userId,
+                            userEmail,
+                            movieId,
+                            newComment,
+                            newPoint.toInt()
+                        ), movieId
+                    )
                 }
             }
         }

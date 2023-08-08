@@ -23,8 +23,6 @@ class SignInViewModel @Inject constructor(
 
     suspend fun signIn(email: String, password: String) {
 
-        //Bunu suspend yapmak yerine viewModelScope.launch { } kullanılır mı ?
-
         val isValid = repo.signIn(email, password)
 
         if (email.isNullOrBlank() || password.isNullOrBlank()) {

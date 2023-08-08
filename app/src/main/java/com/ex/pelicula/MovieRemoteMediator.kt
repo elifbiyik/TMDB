@@ -1,20 +1,5 @@
 package com.ex.pelicula
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadType
-import androidx.paging.PagingState
-import androidx.paging.RemoteMediator
-import com.ex.pelicula.api.MovieApiService
-import com.ex.pelicula.db.AppDatabaseMovie
-import com.ex.pelicula.db.MovieDao
-import com.ex.pelicula.models.Movie
-import com.ex.pelicula.repository.RepositoryMovie
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-
-
 
 /*
 

@@ -2,16 +2,14 @@ package com.ex.pelicula.db
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.ex.pelicula.models.FavoriteMovie
 import com.ex.pelicula.models.Movie
 
 
 @Dao
-interface MovieDao {
+interface DaoMovie {
 
 
     @Query("SELECT *FROM Movie")

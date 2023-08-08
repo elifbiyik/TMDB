@@ -7,8 +7,8 @@ import com.ex.pelicula.models.FavoriteMovie
 
 
 @Database(entities = [FavoriteMovie::class], version = 11)
-abstract class AppDatabase : RoomDatabase() {
-     abstract fun favoritedao() : FavoriteDao
+abstract class AppDatabaseFavorite : RoomDatabase() {
+     abstract fun favoritedao() : DaoFavorite
 
 }
 

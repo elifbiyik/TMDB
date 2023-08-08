@@ -1,20 +1,15 @@
 package com.ex.pelicula.repository
 
-import androidx.paging.PagingSource
 import com.ex.pelicula.api.MovieApiService
 import com.ex.pelicula.data.ApiConstant
-import com.ex.pelicula.db.MovieDao
-import com.ex.pelicula.models.FavoriteMovie
+import com.ex.pelicula.db.DaoMovie
 import com.ex.pelicula.models.GetMoviesResponse
 import com.ex.pelicula.models.Movie
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
 
-class RepositoryMovie @Inject constructor(private val movieApi: MovieApiService, private var movieDao: MovieDao) {
+class RepositoryMovie @Inject constructor(private val movieApi: MovieApiService, private var daoMovie: DaoMovie) {
 
     suspend fun getDataPopular(page: Long): Response<GetMoviesResponse> {
         return movieApi.getPopular(ApiConstant.API_KEY, page)
@@ -61,7 +56,7 @@ class RepositoryMovie @Inject constructor(private val movieApi: MovieApiService,
 
 
         var x = allMovies.sortedByDescending { it.vote_average }
-      movieDao.insertAll(x)
+      daoMovie.insertAll(x)
         return x
     }
 /*    suspend fun getPopular(): Response<GetMoviesResponse> {

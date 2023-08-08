@@ -1,7 +1,6 @@
 package com.ex.pelicula.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ex.pelicula.db.AppDatabase
 import com.ex.pelicula.R
 import com.ex.pelicula.adapter.AdapterFavorite
 import com.ex.pelicula.databinding.FragmentFavBinding
@@ -57,12 +54,11 @@ class FavoriteFragment : Fragment() {
 
             var movieList = viewModel.getFavorite(userId)
 
-
             adapter = AdapterFavorite(movieList) {
 
                 var fragment = DetailFragment()
                 var bundle = Bundle()
-                bundle.putString("id", it.id!!.toLong().toString())
+                bundle.putString("id", it.id.toString())
                 bundle.putString("name", it.original_title)
                 bundle.putString("vote_average", it.vote_average)
                 bundle.putString("overview", it.overview)
@@ -86,13 +82,8 @@ class FavoriteFragment : Fragment() {
                 adapter.list = favMovie
                 adapter.notifyDataSetChanged()
 
+                if (favMovie.isEmpty()) Toast.makeText(requireContext(),"Unsuccessful",Toast.LENGTH_SHORT) .show()
 
-                if (favMovie.isEmpty()) Toast.makeText(
-                    requireContext(),
-                    "Unsuccessful",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
             }
         })
 
