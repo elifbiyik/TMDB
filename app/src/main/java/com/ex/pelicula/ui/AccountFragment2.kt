@@ -99,7 +99,8 @@ class AccountFragment2 : Fragment() {
                 binding.editImage.visibility = View.GONE
 
                 lifecycleScope.launch { // Firebase işlemleri asenkron
-                    viewModel.updateUser(newEmail, newName) // Firebaseye kaydetme işlemi
+             //       viewModel.updateUserMail(newEmail)
+                viewModel.updateUser(newEmail, newName) // Firebaseye kaydetme işlemi
                 }
                 Toast.makeText(context, " Update", Toast.LENGTH_SHORT).show()
 

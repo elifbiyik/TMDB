@@ -37,7 +37,7 @@ object RoomModule {
 
     // AppDatabase::class.java -> abstract sınıf veya interface olmalıdır.
 // favorite.db -> Oluşturulan veritabanının adıdır.( SQLite veritabanı dosyasının adı )
-    // ygulama içinde favorite.db ile erişilir.
+    // uygulama içinde favorite.db ile erişilir.
 
 
     @Provides

@@ -40,6 +40,10 @@ class AccountViewModel2 @Inject constructor(
         repo.updateUserEmailAndName(newEmail, newName)
 
     }
+    suspend fun  updateUserMail(newEmail: String){
+        repo.updateUserEmail(newEmail)
+
+    }
 
 
     fun updateUserProfilePhoto(imageUri: Uri?) {

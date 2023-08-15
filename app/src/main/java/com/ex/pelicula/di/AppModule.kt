@@ -57,6 +57,7 @@ object AppModuleAppModule {
         return retrofit.create(MovieApiService::class.java)
     }
 
+// FirebaseAuth ve FirebaseDatabase işlevlerini doğrudan örneği alınabilir. Direkt single ile oluşturulabilir.
 
 
 

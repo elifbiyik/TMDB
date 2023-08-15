@@ -4,8 +4,11 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.NonNull
 import com.ex.pelicula.models.User
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -78,38 +81,64 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
         return auth.currentUser!!.email!!
     }
 
+    @SuppressLint("SuspiciousIndentation")
+    suspend fun updateUserEmail(newEmail: String) {
+        var user = auth.currentUser
+        // Get auth credentials from the user for re-authentication
+        var credential = EmailAuthProvider
+            .getCredential(user!!.email.toString(), "eeeeee"); // Current Login Credentials \\
+        // Prompt the user to re-provide their sign-in credentials
+        user!!.reauthenticate(credential)
+            .addOnCompleteListener(OnCompleteListener<Void>() {
+                @Override
+                fun onComplete(@NonNull task: Task<Void>) {
+                    //Now change your email address \\
+                    //----------------Code for Changing Email Address----------\\
+                    var user = auth.currentUser
+                    user!!.updateEmail(newEmail)
+                        .addOnCompleteListener(OnCompleteListener<Void>() {
+                            @Override
+                            fun onComplete(@NonNull task: Task<Void>) {
+                                if (task.isSuccessful) {
+                                    // Sign in success now update email
+                                    auth.currentUser!!.updateEmail(newEmail)
+                                        .addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                // email update completed
+                                            } else {
+                                                // email update failed
+                                            }
+                                        }
+                                }
+                            }
+                        });
+                    //----------------------------------------------------------\\
+                }
+            });
+
+
+    }
 
     @SuppressLint("SuspiciousIndentation")
     suspend fun updateUserEmailAndName(newEmail: String, newName: String) {
 
         var user = auth.currentUser!!
 
-       var email =
-            user.updateEmail(newEmail)
 
         var newName = UserProfileChangeRequest.Builder()
             .setDisplayName(newName)
             .build()
         user.updateProfile(newName)
 
-
-        Log.d("Email", email.toString())
-
+        user.updateEmail(newEmail)
 
 
- /*       email.addOnCompleteListener {
+        /*       email.addOnCompleteListener {
             if(it.isSuccessful) Log.d("UpdateEmail", "UpdateEmail")
             else Log.d("UpdateEmail", "else")
         }*/
 
 
-
-        try {
-            user.updateEmail(newEmail)
-        }
-        catch (e:Exception){
-            Log.d("UpdateEmail", e.message.toString())
-        }
     }
 
 
@@ -139,7 +168,6 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
     fun signOut() {
         auth.signOut()
     }
-
 
 }
 
