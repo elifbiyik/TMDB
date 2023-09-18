@@ -1,30 +1,43 @@
 package com.ex.pelicula.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
 import com.ex.pelicula.MoviePagingDataSource
-import com.ex.pelicula.db.AppDatabaseMovie
-import com.ex.pelicula.models.FavoriteMovie
 import com.ex.pelicula.models.Movie
 import com.ex.pelicula.repository.RepositoryMovie
 import dagger.hilt.android.lifecycle.HiltViewModel
-import okio.utf8Size
 import javax.inject.Inject
 
 
 @HiltViewModel
-class HomePageViewModel @Inject constructor(
-    private val repo: RepositoryMovie,
-    private val databaseMovie: AppDatabaseMovie
-) : ViewModel() {
+class HomePageViewModel @Inject constructor(private val repo: RepositoryMovie) : ViewModel() {
+
+    fun getMoviePopular(): LiveData<PagingData<Movie>> {
+        return (Pager(
+            config = PagingConfig(1),
+            pagingSourceFactory = {
+                MoviePagingDataSource(
+                    repo,
+                    ""
+                )
+            } //Veri kaynağı yönetilir. Veri kaynağı = repo
+        )
+                ).liveData.cachedIn(viewModelScope)
+    }
+
+    fun filterData(search: String): LiveData<PagingData<Movie>> {
+
+        return (Pager(PagingConfig(1)) {
+            MoviePagingDataSource(repo, search)
+        }.liveData)
+    }
+
 
     // MLD -> düzenlenebiliyor.
     // LD -> sadece okunuyor.
@@ -60,27 +73,6 @@ class HomePageViewModel @Inject constructor(
     // .cachedIn(viewModelScope) -> datayı önbellekte saklar.
     //                              Tekrar dönmek istediğimizde daha hızlı yükler çünkü önbellekte
     //                              Fragment yaşam döngüsü yok olduğunda otomatik yok olur
-
-
-
-// PagingData LiveDataya dönüştürülür.
-    fun getMoviePopular(): LiveData<PagingData<Movie>> {
-       return  (Pager(
-            config = PagingConfig(1),
- //    remoteMediator = MovieRemoteMediator(repo, databaseMovie),
-            pagingSourceFactory = {MoviePagingDataSource(repo,"")} //Veri kaynağı yönetilir. Veri kaynağı = repo
-        )
-                ).liveData.cachedIn(viewModelScope)
-    }
-
-
-    fun filterData(search: String): LiveData<PagingData<Movie>> {
-
-        return (Pager(PagingConfig(1)) {
-            MoviePagingDataSource(repo, search)
-        }.liveData)
-
-    }
 
 
     // Paging kullandığımız için api dönüşü call olmamalı (Response yaptık). Call olmadığı için callback işlemi yapamadık.
@@ -137,22 +129,6 @@ class HomePageViewModel @Inject constructor(
 
 // EĞER GetMoviesResponse kullanırsam -> TYPE MISMATCH hatası verir.
 // responseBody.results List<Movie> türünde ama mutableLiveData'ya bunu eklemem lazım. bu yüzden GetMoviesResponse yerine Movie kullan.
-
-
-/*
-  Log.d(
-                            "VM1",
-                            "${responseBody}"
-                        )             // GetMoviesResponse(page=1, results=[Movie(id=385687, original_language=en,
-                        Log.d(
-                            "VM2",
-                            "${responseBody.results}"
-                        )    //[Movie(id=385687, original_language=en...
-
-
-
-
-*/
 
 
 

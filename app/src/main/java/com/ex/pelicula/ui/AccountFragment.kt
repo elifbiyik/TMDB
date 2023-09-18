@@ -46,15 +46,11 @@ Firebase Storage gibi hizmetlere görüntü yüklemek istediğinizde, genellikle
  */
 
 
-
-
 @AndroidEntryPoint
 class AccountFragment : Fragment() {
 
-
     private val viewModel: AccountViewModel by viewModels()
     private lateinit var binding: FragmentAccountBinding
-
 
     private var imageUri: Uri? = null // Fotoğrafın adresi
 

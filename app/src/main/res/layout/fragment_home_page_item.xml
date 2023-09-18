@@ -9,9 +9,6 @@
             type="com.ex.pelicula.models.Movie" />
     </data>
 
-
-
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,15 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="15dp">
-            <!--  android:onClick="@{()-> listener.click()}">-->
-
-            <!--   listener.click() yaparsan bunu çalıştırmış olursun ama
-               listener::click yaparsam referans vermiş olurum.-->
-
-            <!-- <include
-                 layout="@layout/fragment_home_page"
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent" /> -->
 
             <TextView
                 android:id="@+id/tv_name"
@@ -72,7 +60,6 @@
                 android:text="@={movie.vote_average}"
                 android:textColor="@color/purplee"
                 android:textSize="15sp"
-
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="MissingConstraints" />

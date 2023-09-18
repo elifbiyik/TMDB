@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.bumptech.glide.load.HttpException
-import com.ex.pelicula.models.FavoriteMovie
 import com.ex.pelicula.models.Movie
 import com.ex.pelicula.repository.RepositoryMovie
 import javax.inject.Inject
@@ -38,49 +37,26 @@ class MoviePagingDataSource @Inject constructor(
     PagingSource<Int, Movie>() {
 
 
-
     //Kullanıcı sayfayı yenilemek istediğinde çalışır. Sayfalama baştan başlatılır.
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         return null
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
-
-        val currentPage = params.key ?: 1       // İlk yüklendiğinde null olabilir bu yüzden kontrol edilir.
-        val sizeItem = params.loadSize          // Her yüklenecek sayfadaki toplam öğe sayısı
-
-
-
+        val currentPage = params.key ?: 1
         return try {
-
-    //        var totalPage = repo.getDataPopular(currentPage.toLong()).body()!!.total_pages
-
             val response = repo.getDataPopular(currentPage.toLong())
-      //      val response = repo.getPopular(totalPage)
             val responseBody = response.body()!!.results.sortedByDescending { it.vote_average }
-
-            Log.d("Response", response.toString())
 
             val data =
                 if(search.isNotEmpty()) responseBody.filter { it.original_title.contains(search,ignoreCase = true)}
                 else responseBody
-
-
-
-      //      val res = repo. getDataPopular1().body()!!.results.sortedByDescending { it.vote_average }
-
-
-
-
 
          LoadResult.Page(
                 data = data,
                 prevKey = if (currentPage == 1) null else currentPage.minus(1),
                 nextKey = currentPage.plus(1)
             )
-
-
-
         } catch (e: Exception) {
             LoadResult.Error(e)
         } catch (exception: HttpException) {
@@ -88,9 +64,3 @@ class MoviePagingDataSource @Inject constructor(
         }
     }
 }
-
-// val data = response.body()!!.results.sortedByDescending { it.vote_average }
-// Her sayfayı kendi arasında sıralıyor.
-
-
-// BÜTÜN FİLMLERİ ÇEK - LİSTELE - SONRA PAGİNG YAP

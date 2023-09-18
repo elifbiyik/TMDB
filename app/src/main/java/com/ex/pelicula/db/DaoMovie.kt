@@ -7,10 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.ex.pelicula.models.Movie
 
-
 @Dao
 interface DaoMovie {
-
 
     @Query("SELECT *FROM Movie")
     fun getAll(): PagingSource<Int, Movie>

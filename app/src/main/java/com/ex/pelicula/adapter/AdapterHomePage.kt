@@ -26,10 +26,7 @@ Adapter'a var movieList: List<Movie> vermedik
  */
 
 
-class AdapterHomePage(
-   // var movieList: List<Movie>,
-    private val onClick: (Movie) -> Unit       //Movie tipinde parametre alır ve bir şey döndürmez
-) : PagingDataAdapter<Movie, AdapterHomePage.MovieViewHolder>(DiffCallback) {
+class AdapterHomePage(private val onClick: (Movie) -> Unit) : PagingDataAdapter<Movie, AdapterHomePage.MovieViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -38,7 +35,7 @@ class AdapterHomePage(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        var movie = getItem(position) //movieList[position]
+        var movie = getItem(position)
         movie?.let {
             holder.bind(it)
         }

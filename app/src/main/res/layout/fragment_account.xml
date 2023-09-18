@@ -7,8 +7,6 @@
         <variable
             name="user"
             type="com.ex.pelicula.viewModel.AccountViewModel" />
-
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +14,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.AccountFragment">
 
-        <!-- TODO: Update blank fragment layout -->
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -121,7 +118,7 @@
             app:layout_constraintTop_toTopOf="@+id/acc_email"
             app:srcCompat="@drawable/mail" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/acc_im"
             android:layout_width="183dp"
             android:layout_height="176dp"
@@ -130,7 +127,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
+            tools:ignore="MissingClass" />
 
 
 

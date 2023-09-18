@@ -45,17 +45,12 @@ class FavoriteFragment : Fragment() {
 // lifecycleScope.launch(Dispatchers.Main) -> Asenkron işlemleri başlatmak için kullanılır.
 // Uzun süren işlemleri ana iş parçacığından ayırarak ve arka plan iş parçacığında çalıştırarak, uygulamanızın daha düzgün ve daha hızlı çalışmasını sağlayabilirsiniz.
 
-
         var userId = viewModel.getUser()
 
-
-        // Dispatchers.IO iken çalıştı ama sonradan hata verdi Main yapınca çalıştı ?????
         lifecycleScope.launch(Dispatchers.Main) {
 
             var movieList = viewModel.getFavorite(userId)
-
             adapter = AdapterFavorite(movieList) {
-
                 var fragment = DetailFragment()
                 var bundle = Bundle()
                 bundle.putString("id", it.id.toString())
@@ -65,7 +60,6 @@ class FavoriteFragment : Fragment() {
                 bundle.putString("imageURL", it.backdrop_path)
                 bundle.putBoolean("isFavorite", true)
                 fragment.arguments = bundle
-
 
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.constraint, fragment)
@@ -82,11 +76,11 @@ class FavoriteFragment : Fragment() {
                 adapter.list = favMovie
                 adapter.notifyDataSetChanged()
 
-                if (favMovie.isEmpty()) Toast.makeText(requireContext(),"Unsuccessful",Toast.LENGTH_SHORT) .show()
-
+                if (favMovie.isEmpty()) {
+                    Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
+                }
             }
         })
-
         return binding.root
     }
 }

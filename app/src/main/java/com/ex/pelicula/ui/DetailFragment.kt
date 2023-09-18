@@ -28,14 +28,11 @@ class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
     private val viewModel: DetailViewModel by viewModels()
     private lateinit var favMovies: FavoriteMovie
-
     private lateinit var list: List<FavoriteMovie>
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
 
         }
     }
@@ -49,7 +46,6 @@ class DetailFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-
         var movieName = arguments?.getString("name")!!
         var movieAverage = arguments?.getString("vote_average").toString()
         var id = arguments?.getString("id")!!.toLong()
@@ -58,8 +54,6 @@ class DetailFragment : Fragment() {
         var movieImagePoster = arguments?.getString("imagePoster").toString()
 
         var isFavorite = arguments?.getBoolean("isFavorite")
-        // Favori snınıfından detail syfası açıldıpında açılıyro. Fav olup olmadığını görmek için.
-
 
         binding.movieName.text = movieName
         binding.movieAverage.text = movieAverage
@@ -71,7 +65,6 @@ class DetailFragment : Fragment() {
         var userEmail = viewModel.getUserEmail()
 
         lifecycleScope.launch {
-
             list = viewModel.getFavorite(userId)
             Log.d("ListDetail1", list.toString())
 
@@ -91,22 +84,17 @@ class DetailFragment : Fragment() {
                 userId
             )
 
-
             if (isFavorite == true) {
                 binding.detailfavorite.Color(R.color.Red)
             }
-
 
             if (list.contains(favMovies)) {
                 binding.detailfavorite.Color(R.color.Red)
             }
 
             binding.detailfavorite.setOnClickListener {
-
                 lifecycleScope.launch {
                     list = viewModel.getFavorite(userId)
-
-                    Log.d("ListDetail2", list.toString())
 
                     if (list.contains(favMovies)) {
                         binding.detailfavorite.Color(R.color.black)
@@ -124,40 +112,16 @@ class DetailFragment : Fragment() {
                         viewModel.addFavorite(favMovies, userId)
                     }
                 }
-
-
-/*
-                viewModel.favMutableLiveData.observe(viewLifecycleOwner, Observer { list ->
-
-                    if (!list.contains(favMovies)) {
-                        binding.detailfavorite.Color(R.color.Red)
-                        viewModel.addFavorite(favMovies, userId)
-                    }
-                    else {
-                        binding.detailfavorite.Color(R.color.black)
-                        viewModel.removeFavorite(favMovies, userId)
-                    }
-                })
-*/
-
-
             }
-
         }
 
-
         binding.comment.setOnClickListener {
-
-            // Comment sayfasına at -> detayına girdiğin bilgiler
-
             var fragment = CommentFragment()
             var bundle = Bundle()
             bundle.putString("id", id.toString())
             bundle.putString("name", movieName)
             bundle.putString("userId", userId)
-
             bundle.putString("userEmail", userEmail)
-
             fragment.arguments = bundle
 
             requireActivity().supportFragmentManager.beginTransaction()
@@ -166,10 +130,7 @@ class DetailFragment : Fragment() {
                 .commit()
         }
 
-
-
         viewModel.favMutableLiveData.observe(viewLifecycleOwner, Observer { list ->
-
             if (!list.contains(favMovies)) Toast.makeText(
                 requireContext(),
                 "Deleted from your favorite list  ",
@@ -180,37 +141,8 @@ class DetailFragment : Fragment() {
                 "Added to your favorite list ",
                 Toast.LENGTH_SHORT
             ).show()
-
         })
-
-
 
         return binding.root
     }
-
 }
-
-
-/*
-
-
-        favMovie = Movie(original_title = movieName, poster_path = movieImage)
-
- */
-
-
-/*
-        binding.detailfavorite.setOnClickListener {
-
-
-
-            /*     if  (color == ContextCompat.getColor(requireContext(), R.color.Red)) {
-                     //     else{
-                     color = ContextCompat.getColor(requireContext(), R.color.black)
-                     binding.detailfavorite.setColorFilter(color)
-                     viewModel.removeFavorite(movieName)
-                 }*/
-            //     eğer kırmızıysa  remove çalışıcak.
-
-        }
- */

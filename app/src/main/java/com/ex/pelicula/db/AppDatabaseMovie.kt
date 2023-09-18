@@ -9,3 +9,6 @@ import com.ex.pelicula.models.Movie
 abstract class AppDatabaseMovie : RoomDatabase() {
     abstract fun movieDao() : DaoMovie
 }
+
+
+

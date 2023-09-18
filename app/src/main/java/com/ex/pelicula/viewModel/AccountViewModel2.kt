@@ -21,28 +21,21 @@ class AccountViewModel2 @Inject constructor(
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
 
-
     var userMutableLiveData = MutableLiveData<FirebaseUser?>()
-
     var profilMutableLiveData = MutableLiveData<Uri>()
 
-
     fun getUser() {
-
         var user = repo.getUser()
         userMutableLiveData.postValue(user)
-
-        Log.d("userIdUser", user.toString())
-
     }
 
     suspend fun updateUser(newEmail: String, newName: String) {
         repo.updateUserEmailAndName(newEmail, newName)
 
     }
-    suspend fun  updateUserMail(newEmail: String){
-        repo.updateUserEmail(newEmail)
 
+    suspend fun updateUserMail(newEmail: String) {
+        repo.updateUserEmail(newEmail)
     }
 
 
@@ -53,14 +46,12 @@ class AccountViewModel2 @Inject constructor(
 
         //MLD'de googleden gidebilmelik adresi kaydediyor
 
-          repo.getPhotoFor2(imageUri).addOnSuccessListener { uri ->
-               profilMutableLiveData.value = uri
-           } .addOnFailureListener { exception ->
-               Log.d("HataVM", "Hata")
-           }
+        repo.getPhotoFor2(imageUri).addOnSuccessListener { uri ->
+            profilMutableLiveData.value = uri
+        }.addOnFailureListener { exception ->
+            Log.d("HataVM", "Hata")
         }
-
-
+    }
 
     fun getProfil() {
         repo.getProfile().addOnSuccessListener {
@@ -68,7 +59,7 @@ class AccountViewModel2 @Inject constructor(
         }
     }
 
-    fun signOut(){
+    fun signOut() {
         repo.signOut()
     }
 

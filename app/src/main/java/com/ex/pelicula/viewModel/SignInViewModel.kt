@@ -1,6 +1,5 @@
 package com.ex.pelicula.viewModel
 
-
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -16,15 +15,10 @@ class SignInViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
-    // Toast mesajları için context lazım @ApplicationContext diyip uygulamanın contexi oluşturuluyor
-
-
     var res = MutableLiveData<Boolean>()
 
     suspend fun signIn(email: String, password: String) {
-
         val isValid = repo.signIn(email, password)
-
         if (email.isNullOrBlank() || password.isNullOrBlank()) {
             Toast.makeText(
                 context,
@@ -41,7 +35,6 @@ class SignInViewModel @Inject constructor(
         }
         else {
             res.value = isValid
-
         }
     }
 

@@ -20,11 +20,8 @@ class AccountViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
 
-
     var userMutableLiveData = MutableLiveData<FirebaseUser?>()
-
     var profilMutableLiveData = MutableLiveData<Uri>()
-
 
     fun getUser() {
 

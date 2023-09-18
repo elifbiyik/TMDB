@@ -20,7 +20,6 @@ object AppModuleAppModule {
 
 // Provides -> Bağımlılıkları oluşturmak için
 
-
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth {
@@ -56,15 +55,6 @@ object AppModuleAppModule {
     fun provideApiService(retrofit: Retrofit): MovieApiService {
         return retrofit.create(MovieApiService::class.java)
     }
-
-// FirebaseAuth ve FirebaseDatabase işlevlerini doğrudan örneği alınabilir. Direkt single ile oluşturulabilir.
-
-
-
-
-
-
-
 }
 
 

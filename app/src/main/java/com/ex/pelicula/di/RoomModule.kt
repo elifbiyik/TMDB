@@ -6,7 +6,6 @@ import com.ex.pelicula.db.AppDatabaseFavorite
 import com.ex.pelicula.db.AppDatabaseComment
 import com.ex.pelicula.db.AppDatabaseMovie
 import com.ex.pelicula.db.DaoComment
-
 import com.ex.pelicula.db.DaoFavorite
 import com.ex.pelicula.db.DaoMovie
 import dagger.Module
@@ -20,14 +19,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RoomModule {
 
-
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabaseFavorite {
         return Room.databaseBuilder(context, AppDatabaseFavorite::class.java, "favorite.db").fallbackToDestructiveMigration()
             .build()
     }
-
 
     // databaseBuilder ->  yapılandırma seçenkeleri
 // fallbackToDestructiveMigration -> yapılacak değişikliklerle ilgili. Her şema değişikliğinde eski veriler silinir ve baştan yapılır.
@@ -63,7 +60,8 @@ object RoomModule {
     @Provides
     @Singleton
     fun providesAppDatabaseMovie(@ApplicationContext context: Context) : AppDatabaseMovie {
-        return Room.databaseBuilder(context, AppDatabaseMovie::class.java, "movie.db").fallbackToDestructiveMigration().build()
+        return Room.databaseBuilder(context, AppDatabaseMovie::class.java, "movie.db")
+            .fallbackToDestructiveMigration().build()
     }
 
     @Provides

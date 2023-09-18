@@ -10,12 +10,8 @@
         <variable
             name="movie"
             type="com.ex.pelicula.models.FavoriteMovie" />
-
     </data>
 
-  <!--  <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -28,7 +24,6 @@
             android:layout_height="222dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_launcher_background"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -110,88 +105,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/movieOverview" />
 
-
-
-
-        <!--        <EditText
-                    android:id="@+id/editTextComment"
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movieOverview" />
-
-
-                <Button
-                    android:id="@+id/btn_send"
-                    android:layout_width="75dp"
-                    android:layout_height="43dp"
-                    android:text="Send"
-                    android:textSize="10sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/editTextComment"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.129"
-                    app:layout_constraintStart_toEndOf="@+id/editTextComment"
-                    app:layout_constraintTop_toTopOf="@+id/editTextComment"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <LinearLayout
-                    android:layout_width="411dp"
-                    android:layout_height="206dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="1dp"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextComment">
-
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_marginTop="45dp"
-                        android:elevation="10dp"
-                        android:orientation="vertical"
-                        app:cardCornerRadius="15dp">
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="15dp">
-
-                            <include
-                                android:id="@+id/include"
-                                layout="@layout/fragment_fav"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                tools:layout_editor_absoluteX="15dp"
-                                tools:layout_editor_absoluteY="15dp" />
-
-                            <TextView
-                                android:id="@+id/tv_name"
-                                android:layout_width="200dp"
-                                android:layout_height="150dp"
-                                android:gravity="center"
-                                android:padding="20dp"
-                                android:textColor="@color/purple"
-                                android:textSize="18sp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.058"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                tools:ignore="MissingConstraints" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.cardview.widget.CardView>
-                </LinearLayout>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
-<!--
-    </ScrollView>
--->
 </layout>

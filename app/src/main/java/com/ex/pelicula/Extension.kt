@@ -6,7 +6,6 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 
 fun ImageView.ImageLoad(url: String) {
-
     Glide.with(context)
         .load("https://image.tmdb.org/t/p/w342${url}")
         .into(this)

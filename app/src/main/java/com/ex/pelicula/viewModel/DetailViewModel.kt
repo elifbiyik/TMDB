@@ -15,14 +15,12 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) : ViewModel() {
 
-
     var favMutableLiveData = MutableLiveData<List<FavoriteMovie>>()
 
     fun addFavorite(movie: FavoriteMovie, userId: String) {
         viewModelScope.launch {
             repo.addFavorite(movie)
             favMutableLiveData.value = repo.getFavorite(userId)
-
         }
     }
 
@@ -35,15 +33,11 @@ class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) 
 
 // Geri dönüş değeri olmayan işlemler için viewModelScope.launch kul.
 // Veritabanı işlemleri gibi I/O yoğun işlemler için withContext(Dispatchers.IO) kul.
-
-
-    suspend fun getFavorite(userId: String): List<FavoriteMovie> {
-
+  suspend fun getFavorite(userId: String): List<FavoriteMovie> {
         return withContext(Dispatchers.IO) {
             repo.getFavorite(userId)
         }
     }
-
 
     fun getUser(): String {
         return repo.getUser()
@@ -52,6 +46,4 @@ class DetailViewModel @Inject constructor(private val repo: RepositoryFavorite) 
     fun getUserEmail ():String {
         return repo.getUserEmail()
     }
-
-
 }

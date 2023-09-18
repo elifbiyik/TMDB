@@ -15,13 +15,9 @@ import javax.inject.Inject
 
 
 @HiltViewModel()
-class CommentViewModel @Inject constructor(
-    var repo: RepositoryComment
-) : ViewModel() {
-
+class CommentViewModel @Inject constructor(var repo: RepositoryComment) : ViewModel() {
 
     var commentMutableLiveData = MutableLiveData<List<Comment>>()
-
 
     fun insert(comment: Comment, movieId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -42,26 +38,20 @@ class CommentViewModel @Inject constructor(
     }
 
     suspend fun getAll(movieId: Long): List<Comment> {
-
-        return withContext(Dispatchers.IO) {
+    return withContext(Dispatchers.IO) {
             repo.getAll(movieId)
         }
     }
 
-
     suspend fun getCommentAndRating(movieId: Long, userId: String): List<Comment> {
-
-        return withContext(Dispatchers.IO) {
+     return withContext(Dispatchers.IO) {
             repo.getCommentAndRating(movieId, userId)
         }
-
-    }
-
+   }
 
     fun updateComment(userId: String, movieId: Long, comment: String, point: Float, userEmail : String) {
         repo.updateComment(userId, movieId, comment, point, userEmail)
-
-        // GetAll çağırmazsam textviewde comment'i güncellediğimde recyclerView'de güncellenmiyor. Ekrandan çıkıp girmek gerekiyor.
+  // GetAll çağırmazsam textviewde comment'i güncellediğimde recyclerView'de güncellenmiyor. Ekrandan çıkıp girmek gerekiyor.
         // viewModelScope.launch -> GetAll suspen olduğu için kullanıyoruz.
            viewModelScope.launch {
                commentMutableLiveData.value = repo.getAll(movieId)

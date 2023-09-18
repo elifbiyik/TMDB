@@ -8,46 +8,24 @@ import retrofit2.http.Query
 
 interface MovieApiService {
 
-    //https://api.themoviedb.org/3/movie/popular?api_key=08963bf8ff23326caf0287502c99c505&language=en-US&page=1
-
-
-
-/*
-    @GET(ApiConstant.GET_POPULAR)
-    fun getPopular(
-        @Query("api_key") apiKey: String = ApiConstant.API_KEY,
-        @Query("page") page: Int
-    ): Call<GetMoviesResponse>
-*/
-
-
     @GET(ApiConstant.GET_POPULAR)
     suspend fun getPopular(
         @Query("api_key") apiKey: String = ApiConstant.API_KEY,
         @Query("page") page: Long
     ): Response<GetMoviesResponse>
 
-
     @GET(ApiConstant.GET_POPULAR)
     suspend fun getPopular1(
         @Query("api_key") apiKey: String = ApiConstant.API_KEY,
         @Query("sort_by") sortBy: String
     ): Response<GetMoviesResponse>
-
 }
 
 /*
-
 Call  -------> Direkt yanıtı döndürür.
 Response ----> HTTP durumunu da döndürür. ( İçerisinde yanıt, HTTP kodu (200, 500..) bilgileri vardır. )
 
 Response kullanma sebebi :
 Hata olup olmamasına göre bir sonraki sayfanın gelmesi için.
 Mesela 404 döndüğünde sayfalama yapılmaz.
-
-
-
  */
-
-
-// ......com/movie/popular?api_key=657575&page=1

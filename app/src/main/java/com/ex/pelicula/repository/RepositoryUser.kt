@@ -21,17 +21,12 @@ import javax.inject.Inject
 
 class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
 
-
     private val databaseReference: DatabaseReference =
         FirebaseDatabase.getInstance().getReference("User")
-
-
-    //  var userId: String? = null
 
     init {
         auth = FirebaseAuth.getInstance()
     }
-
 
     suspend fun signIn(email: String, password: String): Boolean {
         return try {
@@ -41,36 +36,27 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
             false
         }
     }
-    // await kullandık çünkü signInWithEmailAndPassword sonucunu öğrenip öyle devam etmelyiiz.
-
 
     suspend fun signUp(email: String, password: String, name: String, lastname: String): Boolean {
         return try {
-            val x = auth.createUserWithEmailAndPassword(email, password).await()
+            auth.createUserWithEmailAndPassword(email, password).await()
 
             var userName = UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
                 .build()
 
             auth.currentUser!!.updateProfile(userName)
-            // Name bilgisini displayName'e atadık çünkü name çağıramıyoruz. displayName çağrılması gerekiyor.
-
             val userId = auth.currentUser!!.uid
-            //   val userId = databaseReference.push().getKey()
             val user = User(email, password, name, lastname)
             databaseReference.child(userId!!).setValue(user)
-
             true
         } catch (e: Exception) {
             false
         }
     }
 
-
     fun getUser(): FirebaseUser? {
-
         return auth.currentUser
-
     }
 
     fun currentUser(): String {
@@ -111,39 +97,27 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
                                         }
                                 }
                             }
-                        });
-                    //----------------------------------------------------------\\
+                        })
                 }
-            });
-
-
+            })
     }
 
     @SuppressLint("SuspiciousIndentation")
     suspend fun updateUserEmailAndName(newEmail: String, newName: String) {
-
         var user = auth.currentUser!!
-
-
         var newName = UserProfileChangeRequest.Builder()
             .setDisplayName(newName)
             .build()
         user.updateProfile(newName)
-
         user.updateEmail(newEmail)
-
 
         /*       email.addOnCompleteListener {
             if(it.isSuccessful) Log.d("UpdateEmail", "UpdateEmail")
             else Log.d("UpdateEmail", "else")
         }*/
-
-
     }
 
-
     fun getPhotoFor2(imageUri: Uri?): Task<Uri> {
-
         var uid = auth.currentUser?.uid
         val storageReference = FirebaseStorage.getInstance()
         var imageReference = storageReference.reference.child("images/$uid.jpg")
@@ -155,20 +129,18 @@ class RepositoryUser @Inject constructor(private var auth: FirebaseAuth) {
         auth.currentUser?.updateProfile(profile)
 
         return imageReference.downloadUrl
-
     }
-
 
     fun getProfile(): Task<Uri> {
         var uid = auth.currentUser!!.uid
         val imageReference = FirebaseStorage.getInstance().reference.child("images/$uid.jpg")
+
         return imageReference.downloadUrl
     }
 
     fun signOut() {
         auth.signOut()
     }
-
 }
 
 

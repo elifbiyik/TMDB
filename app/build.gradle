@@ -2,9 +2,6 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
-//    id 'kotlin-kapt'
- //   id 'dagger.hilt.android.plugin'
- //id 'kotlin-android-extensions'
     id 'kotlin-android'
     id("com.google.dagger.hilt.android")
 
@@ -40,10 +37,6 @@ android {
         }
     }
 
-//API BAĞLANTISI YAPILACAK OLAN KEY
- //   buildConfigField "String", "API_KEY","\"08963bf8ff23326caf0287502c99c505 \""
-
-
     buildTypes {
         release {
             minifyEnabled false
@@ -65,16 +58,6 @@ android {
 
 dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
-
-
-    /*   modules {
-           module("org.jetbrains.kotlin:kotlin-stdlib-jdk7") {
-               replacedBy("org.jetbrains.kotlin:kotlin-stdlib", "kotlin-stdlib-jdk7 is now part of kotlin-stdlib")
-           }
-           module("org.jetbrains.kotlin:kotlin-stdlib-jdk8") {
-               replacedBy("org.jetbrains.kotlin:kotlin-stdlib", "kotlin-stdlib-jdk8 is now part of kotlin-stdlib")
-           }
-       }*/
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
             because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
@@ -83,7 +66,6 @@ dependencies {
             because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
         }
     }
-
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -111,7 +93,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
 
 
-
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
@@ -129,7 +110,6 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.3.6'
 
 
-
     implementation "androidx.room:room-runtime:2.3.0"
     implementation "androidx.room:room-ktx:2.3.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
@@ -139,9 +119,8 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:3.2.0"
     implementation "androidx.paging:paging-common-ktx:3.2.0"
 
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation "androidx.constraintlayout:constraintlayout:2.1.3"
 }
 
-/*
-kapt {
-    correctErrorTypes = true
-}*/
+

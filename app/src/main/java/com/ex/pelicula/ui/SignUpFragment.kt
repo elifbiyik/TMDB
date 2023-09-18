@@ -47,9 +47,7 @@ class SignUpFragment : Fragment() {
         bottomNav.visibility = View.GONE
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up, container, false)
-
         binding.lifecycleOwner = this //Lifecycle'ı doğru şekilde takp edecek
-
 
         binding.button4.setOnClickListener {
             var email = binding.txtEmail.text.toString()
@@ -57,13 +55,10 @@ class SignUpFragment : Fragment() {
             var name = binding.txtName.text.toString()
             var lastName = binding.txtLastName.text.toString()
 
-
             lifecycleScope.launch {
                 viewModel.signUp(email, password, name, lastName)
             }
         }
-
-
 
         viewModel.signUpRes.observe(this, Observer { isValid ->
             if (isValid) {
@@ -73,12 +68,8 @@ class SignUpFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             } else Toast.makeText(requireContext(), "Unsuccessful", Toast.LENGTH_SHORT).show()
-
         })
 
-
         return binding.root
-
-
     }
 }

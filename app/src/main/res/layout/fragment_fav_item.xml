@@ -17,15 +17,10 @@
         android:orientation="vertical"
         app:cardCornerRadius="15dp">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="15dp">
-            <!--  android:onClick="@{()-> listener.click()}">-->
-
-            <!--   listener.click() yaparsan bunu çalıştırmış olursun ama
-               listener::click yaparsam referans vermiş olurum.-->
 
             <include
                 android:id="@+id/include"
@@ -75,7 +70,6 @@
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/favoritered"
                 tools:ignore="ExtraText,MissingConstraints" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -11,18 +11,12 @@
             type="com.ex.pelicula.models.FavoriteMovie" />
     </data>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:ignore="ExtraText">
 
-       <!--   <include
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              layout="@layout/fragment_home_page_item" />
--->
-        <androidx.appcompat.widget.SearchView
+          <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +27,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:queryHint="Search"
             tools:ignore="MissingConstraints" />
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
@@ -47,7 +40,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchView"
             tools:listitem="@layout/fragment_home_page_item" />
-        -->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

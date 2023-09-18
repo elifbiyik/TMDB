@@ -15,18 +15,6 @@ interface DaoFavorite {
     @Delete
     suspend fun delete (favorite : FavoriteMovie)
 
-
     @Query ("SELECT *FROM Favorite WHERE userId = :userId")
     suspend fun getAll (userId: String) : List<FavoriteMovie>
-
-
-
-
-
-
-
 }
-
-
-
-

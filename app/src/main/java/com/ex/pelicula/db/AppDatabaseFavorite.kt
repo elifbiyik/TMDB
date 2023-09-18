@@ -4,12 +4,9 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.ex.pelicula.models.FavoriteMovie
 
-
-
 @Database(entities = [FavoriteMovie::class], version = 11)
 abstract class AppDatabaseFavorite : RoomDatabase() {
      abstract fun favoritedao() : DaoFavorite
-
 }
 
 // allowMainThreadQueries() -> ana iş parçacığında veritabanı sorgularının yapılmasına izin verir

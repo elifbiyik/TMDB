@@ -31,15 +31,10 @@ class CommentFragment : Fragment() {
     private lateinit var bindingRecyclerView: FragmentCommentItemBinding
     private val viewModel: CommentViewModel by viewModels()
     private lateinit var adapter: AdapterComment
-
     lateinit var listComment: List<Comment>
     lateinit var myComment: List<Comment>
 
-    var point = 0
     var comment = ""
-
-    private lateinit var list: Comment
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +48,6 @@ class CommentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
-
         bindingItem = DataBindingUtil.inflate(inflater, R.layout.fragment_comment, container, false)
         bindingItem.lifecycleOwner = viewLifecycleOwner
 
@@ -63,30 +57,21 @@ class CommentFragment : Fragment() {
         var movieId = arguments?.getString("id")!!.toLong()
         var userId = arguments?.getString("userId").toString()
         var movieName = arguments?.getString("name").toString()
-
         var userEmail = arguments?.getString("userEmail").toString()
-
 
         bindingItem.nameMovie.text = movieName
 
-
-
-        lifecycleScope.launch {   // getAll ve getCommentAndRating için coroutine kullandık
-
+        lifecycleScope.launch {
             listComment = viewModel.getAll(movieId)
             myComment = viewModel.getCommentAndRating(movieId, userId)
-
             if (myComment.isNotEmpty()) {
 
-                //   bindingItem.ediTextComment.setText(myComment[0].comment)
                 bindingItem.editTextComment.hint = myComment[0].comment
                 bindingItem.rating.rating = myComment[0].point.toFloat()
-
 
                 bindingItem.btnSend.setOnClickListener {
                     var newComment = bindingItem.editTextComment.text.toString()
                     var newPoint = bindingItem.rating.rating.toInt()
-
                     insertOrUpdate(newComment, newPoint.toFloat(), userId, movieId, userEmail)
                 }
 
@@ -94,7 +79,6 @@ class CommentFragment : Fragment() {
                     delete(myComment, movieId, userId)
                 }
             } else {
-
                 bindingItem.editTextComment.hint = ""
                 bindingItem.rating.rating = 0.0.toFloat()
                 bindingItem.btnSend.setOnClickListener {
@@ -111,14 +95,14 @@ class CommentFragment : Fragment() {
                 }
             }
 
-
             viewModel.commentMutableLiveData.observe(viewLifecycleOwner, Observer {
                 adapter.commentList = it
                 adapter.notifyDataSetChanged()
-                if (!it.isEmpty()) myComment = it
+                if (!it.isEmpty()) {
+                    myComment = it
+                }
                 // Listenin son halini myCommente atadım. Bu sayede dB'de yorum yokken yorum yaptıktan sonra silme işlemi yapılabildi.
             })
-
 
             adapter = AdapterComment(listComment)
             bindingItem.recyclerview.adapter = adapter
@@ -127,7 +111,6 @@ class CommentFragment : Fragment() {
         }
         return bindingItem.root
     }
-
 
     fun delete(myComment: List<Comment>, movieId: Long, userId: String) {
         bindingItem.editTextComment.text.clear()
@@ -140,7 +123,7 @@ class CommentFragment : Fragment() {
                     viewModel.delete(
                         listOf(currentUserComment),
                         movieId
-                    ) // Kullanıcının kendi yorumunu sil
+                    )
                 }
             }
             this.myComment = emptyList()
@@ -156,11 +139,10 @@ class CommentFragment : Fragment() {
     ) {
         if (newComment.isNotEmpty() && newPoint != 0.0.toFloat()) {
             lifecycleScope.launch(Dispatchers.IO) {
-                val getCommentAndRating = viewModel.getCommentAndRating(movieId, userId)    // Kullanıcının yorum ve puanı
+                val getCommentAndRating = viewModel.getCommentAndRating(movieId, userId)
                 if (getCommentAndRating.isNotEmpty()) {
                     viewModel.updateComment(userId, movieId, newComment, newPoint, userEmail)
                 } else {
-
                     viewModel.insert(
                         Comment(
                             null,
